@@ -15,19 +15,41 @@
 {{!
     @template mod_sortvoting/sort_form_view
 
-    Template for showing list of sessions.
+    Template for showing list of options to sort.
 
     Example context (json):
     {
-        "addbuttontitle": "Add session",
-        "addbuttonurl": "#",
-        "intro": "Appointment intro",
-        "sessionslisttable": "<table></table>",
-        "signupsessionid": "1",
-        "cansignup": "true"
+        "options": [
+            {
+                "id": "1",
+                "defaultposition": "1",
+                "text": "A"
+            },
+            {
+                "id": "2",
+                "defaultposition": "2",
+                "text": "B"
+            },
+            {
+                "id": "3",
+                "defaultposition": "3",
+                "text": "C"
+            },
+            {
+                "id": "4",
+                "defaultposition": "4",
+                "text": "D"
+            },
+            {
+                "id": "5",
+                "defaultposition": "5",
+                "text": "E"
+            }
+        ]
     }
 }}
-{{! create a list of options with input number at the front, with the array of options}}
 {{#options}}
-<input type="int" value="1"> {{{value}}}
+    <li>
+        <input type="number" name="option[{{id}}]" value="{{defaultposition}}" max="{{max}}" />{{text}}
+    </li>
 {{/options}}

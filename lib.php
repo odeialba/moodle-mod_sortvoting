@@ -53,12 +53,14 @@ function sortvoting_add_instance($sortvoting, $mform = null) {
 
     //insert answers
     $sortvoting->id = $DB->insert_record('sortvoting', $sortvoting);
+    // $defaultposition = 1;
     foreach ($sortvoting->option as $key => $value) {
         $value = trim($value);
         if (isset($value) && $value <> '') {
             $option = new stdClass();
             $option->text = $value;
             $option->sortvotingid = $sortvoting->id;
+            // $option->defaultposition = $defaultposition++;
             $option->timemodified = time();
             $DB->insert_record("sortvoting_options", $option);
         }
@@ -88,11 +90,13 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
 
     //update, delete or insert answers
     // TODO: Check this. Maybe it can be done with a simple array instead of that thing from data processing.
+    // $defaultposition = 1;
     foreach ($sortvoting->option as $key => $value) {
         $value = trim($value);
         $option = new stdClass();
         $option->text = $value;
-        $option->votingid = $sortvoting->id;
+        $option->sortvotingid = $sortvoting->id;
+        // $option->defaultposition = $defaultposition++;
         $option->timemodified = time();
         if (isset($sortvoting->optionid[$key]) && !empty($sortvoting->optionid[$key])){//existing sortvoting record
             $option->id = $sortvoting->optionid[$key];

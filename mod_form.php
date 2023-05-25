@@ -114,13 +114,14 @@ class mod_sortvoting_mod_form extends moodleform_mod {
      **/
     public function data_preprocessing(&$default_values) {
         global $DB;
-        if (!empty($this->_instance) && ($options = $DB->get_records_menu('sortvoting_options', ['sortvotingid'=>$this->_instance], 'id', 'id,text'))) {
+        if (!empty($this->_instance) && ($options = $DB->get_records('sortvoting_options', ['sortvotingid' => $this->_instance], 'id ASC'))) {
 
             $key = 0;
             // TODO: Maybe we can just use normal array without the $key.
-            foreach ($options as $optionid => $option){
-                $default_values['option['.$key.']'] = $option;
-                $default_values['optionid['.$key.']'] = $optionid;
+            foreach ($options as $option){
+                $default_values['option['.$key.']'] = $option->text;
+                $default_values['optionid['.$key.']'] = $option->id;
+                // $default_values['optionposition['.$key.']'] = $option->defaultposition;
                 $key++;
             }
         }

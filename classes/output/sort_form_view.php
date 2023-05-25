@@ -13,11 +13,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace mod_sortvoting\output;
-
-use context_module;
 use renderer_base;
-use core_reportbuilder\system_report_factory;
-use mod_sortvoting\reportbuilder\local\systemreports\sessions;
 
 /**
  * Renderable for showing the sort form of a given activity
@@ -53,53 +49,16 @@ class sort_form_view implements \templatable, \renderable {
         // Get sort voting options from database into an array.
         $options = $DB->get_records('sortvoting_options', ['sortvotingid' => $this->sortvoting->id], 'id ASC');
 
-        return ['options' => $options];
-
-
-
-
-
-
-        $cm = get_coursemodule_from_instance('sortvoting', $this->sortvoting->id, $this->sortvoting->course);
-        $contextmodule = context_module::instance($cm->id);
-
-        // Create our report instance in the course module context.
-        $report = system_report_factory::create(sessions::class, $contextmodule, '', '', 0, [
-            'sortvotingid' => $this->sortvoting->id,
-        ]);
-
-        $context = [
-            'sessionslisttable' => $report->output(),
-            'signupsessionid' => $this->signupsessionid,
-        ];
-
-        if ($this->signupsessionid) {
-            $session = sortvoting_get_session($this->signupsessionid);
-            $context['cansignup'] = \mod_sortvoting\permission::can_signup($session, \context_module::instance($cm->id));
+        $defaultposition = 1;
+        $optionsclean = [];
+        foreach ($options as $option) {
+            $optionsclean[] = [
+                'id' => $option->id,
+                'text' => $option->text,
+                'defaultposition' => $defaultposition++
+            ];
         }
 
-        if (\mod_sortvoting\permission::can_edit_sessions(\context_module::instance($cm->id))) {
-            $actionmenu = new \action_menu();
-            $actionmenu->set_action_label(get_string('adddots'));
-            $actionmenu->set_menu_trigger(get_string('adddots'), 'btn btn-primary align-items-center mb-2');
-
-            $link = new \action_menu_link_secondary(
-                new \moodle_url('#'),
-                null,
-                get_string('sortvoting', 'sortvoting'),
-                ['data-cmid' => $cm->id, 'data-action' => 'addsession']);
-            $actionmenu->add($link);
-
-            $link = new \action_menu_link_secondary(
-                new \moodle_url('#'),
-                null,
-                get_string('multiplesortvotings', 'sortvoting'),
-                ['data-cmid' => $cm->id, 'data-action' => 'addmultiple']);
-            $actionmenu->add($link);
-
-            $context['actions'] = $actionmenu->export_for_template($output);
-        }
-
-        return $context;
+        return ['options' => $optionsclean, 'max' => count($options)];
     }
 }
