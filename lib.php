@@ -100,7 +100,7 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
                 $DB->update_record("sortvoting_options", $option);
             } else {
                 // Remove the empty (unused) option.
-                $DB->delete_records("sortvoting_options", array("id" => $option->id));
+                $DB->delete_records("sortvoting_options", ["id" => $option->id]);
                 // Delete any answers associated with this option.
                 // TODO: Play with answers.
                 // $DB->delete_records("sortvoting_answers", array("votingid" => $sortvoting->id, "optionid" => $option->id));
@@ -127,7 +127,7 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
 function sortvoting_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('sortvoting', array('id' => $id));
+    $exists = $DB->get_record('sortvoting', ['id' => $id]);
     if (!$exists) {
         return false;
     }
@@ -174,7 +174,7 @@ function sortvoting_prepare_options($choice, $user, $coursemodule, $allresponses
             } else {
                 $option->countanswers = 0;
             }
-            if ($DB->record_exists('choice_answers', array('choiceid' => $choice->id, 'userid' => $user->id, 'optionid' => $optionid))) {
+            if ($DB->record_exists('choice_answers', ['choiceid' => $choice->id, 'userid' => $user->id, 'optionid' => $optionid])) {
                 $option->attributes->checked = true;
             }
             if ( $choice->limitanswers && ($option->countanswers >= $option->maxanswers) && empty($option->attributes->checked)) {
@@ -186,7 +186,7 @@ function sortvoting_prepare_options($choice, $user, $coursemodule, $allresponses
 
     $cdisplay['hascapability'] = is_enrolled($context, NULL, 'mod/choice:choose'); //only enrolled users are allowed to make a choice
 
-    if ($choice->allowupdate && $DB->record_exists('choice_answers', array('choiceid'=> $choice->id, 'userid'=> $user->id))) {
+    if ($choice->allowupdate && $DB->record_exists('choice_answers', ['choiceid'=> $choice->id, 'userid'=> $user->id])) {
         $cdisplay['allowupdate'] = true;
     }
 
@@ -221,7 +221,7 @@ function sortvoting_get_response_data($choice, $cm, $groupmode, $onlyactive) {
     }
 
 /// Initialise the returned array, which is a matrix:  $allresponses[responseid][userid] = responseobject
-    $allresponses = array();
+    $allresponses = [];
 
 /// First get all the users who have access here
 /// To start with we assume they are all "unanswered" then move them later
@@ -232,12 +232,12 @@ function sortvoting_get_response_data($choice, $cm, $groupmode, $onlyactive) {
             $userfields, null, 0, 0, $onlyactive);
 
 /// Get all the recorded responses for this choice
-    $rawresponses = $DB->get_records('choice_answers', array('choiceid' => $choice->id));
+    $rawresponses = $DB->get_records('choice_answers', ['choiceid' => $choice->id]);
 
 /// Use the responses to move users into the correct column
 
     if ($rawresponses) {
-        $answeredusers = array();
+        $answeredusers = [];
         foreach ($rawresponses as $response) {
             if (isset($allresponses[0][$response->userid])) {   // This person is enrolled and in correct group
                 $allresponses[0][$response->userid]->timemodified = $response->timemodified;

@@ -22,72 +22,72 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
+$capabilities = [
 
-    'mod/sortvoting:addinstance' => array(
+    'mod/sortvoting:addinstance' => [
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        ),
+        ],
         'clonepermissionsfrom' => 'moodle/course:manageactivities'
-    ),
+    ],
 
-    'mod/sortvoting:choose' => array(
+    'mod/sortvoting:choose' => [
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'student' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW
-        )
-    ),
+        ]
+    ],
 
-    'mod/sortvoting:readresponses' => array(
+    'mod/sortvoting:readresponses' => [
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        )
-    ),
+        ]
+    ],
 
-    'mod/sortvoting:deleteresponses' => array(
+    'mod/sortvoting:deleteresponses' => [
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        )
-    ),
+        ]
+    ],
 
-    'mod/sortvoting:downloadresponses' => array(
+    'mod/sortvoting:downloadresponses' => [
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        )
-    ),
+        ]
+    ],
 
-    'mod/sortvoting:view' => array(
+    'mod/sortvoting:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'user' => CAP_ALLOW,
             'guest' => CAP_ALLOW
-        )
-    )
-);
+        ]
+    ]
+];
 
 

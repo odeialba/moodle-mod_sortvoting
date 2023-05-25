@@ -34,10 +34,10 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-$event = \mod_sortvoting\event\course_module_viewed::create(array(
+$event = \mod_sortvoting\event\course_module_viewed::create([
     'objectid' => $sortvoting->id,
     'context' => $modulecontext
-));
+]);
 $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('sortvoting', $sortvoting);
 $event->trigger();

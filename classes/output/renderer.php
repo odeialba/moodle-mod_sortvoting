@@ -37,17 +37,17 @@ class renderer extends \plugin_renderer_base {
         $layoutclass = 'vertical';
         // }
         $target = new moodle_url('/mod/sortvoting/view.php');
-        $attributes = array('method'=>'POST', 'action'=>$target, 'class'=> $layoutclass);
-        $disabled = empty($options['previewonly']) ? [] : array('disabled' => 'disabled');
+        $attributes = ['method'=>'POST', 'action'=>$target, 'class'=> $layoutclass];
+        $disabled = empty($options['previewonly']) ? [] : ['disabled' => 'disabled'];
 
         $html = html_writer::start_tag('form', $attributes);
-        $html .= html_writer::start_tag('ul', array('class' => 'choices list-unstyled unstyled'));
+        $html .= html_writer::start_tag('ul', ['class' => 'choices list-unstyled unstyled']);
 
         $availableoption = count($options['options']);
         $choicecount = 0;
         foreach ($options['options'] as $option) {
             $choicecount++;
-            $html .= html_writer::start_tag('li', array('class' => 'option mr-3'));
+            $html .= html_writer::start_tag('li', ['class' => 'option mr-3']);
             if ($multiple) {
                 $option->attributes->name = 'answer[]';
                 $option->attributes->type = 'checkbox';
@@ -72,32 +72,32 @@ class renderer extends \plugin_renderer_base {
             }
 
             $html .= html_writer::empty_tag('input', (array)$option->attributes + $disabled);
-            $html .= html_writer::tag('label', $labeltext, array('for'=>$option->attributes->id));
+            $html .= html_writer::tag('label', $labeltext, ['for'=>$option->attributes->id]);
             $html .= html_writer::end_tag('li');
         }
-        $html .= html_writer::tag('li','', array('class'=>'clearfloat'));
+        $html .= html_writer::tag('li','', ['class'=>'clearfloat']);
         $html .= html_writer::end_tag('ul');
-        $html .= html_writer::tag('div', '', array('class'=>'clearfloat'));
-        $html .= html_writer::empty_tag('input', array('type'=>'hidden', 'name'=>'sesskey', 'value'=>sesskey()));
-        $html .= html_writer::empty_tag('input', array('type'=>'hidden', 'name'=>'action', 'value'=>'makechoice'));
-        $html .= html_writer::empty_tag('input', array('type'=>'hidden', 'name'=>'id', 'value'=>$coursemoduleid));
+        $html .= html_writer::tag('div', '', ['class'=>'clearfloat']);
+        $html .= html_writer::empty_tag('input', ['type'=>'hidden', 'name'=>'sesskey', 'value'=>sesskey()]);
+        $html .= html_writer::empty_tag('input', ['type'=>'hidden', 'name'=>'action', 'value'=>'makechoice']);
+        $html .= html_writer::empty_tag('input', ['type'=>'hidden', 'name'=>'id', 'value'=>$coursemoduleid]);
 
         if (empty($options['previewonly'])) {
             if (!empty($options['hascapability']) && ($options['hascapability'])) {
                 if ($availableoption < 1) {
                     $html .= html_writer::tag('label', get_string('choicefull', 'choice'));
                 } else {
-                    $html .= html_writer::empty_tag('input', array(
+                    $html .= html_writer::empty_tag('input', [
                         'type' => 'submit',
                         'value' => get_string('savemychoice', 'choice'),
                         'class' => 'btn btn-primary'
-                    ));
+                    ]);
                 }
 
                 if (!empty($options['allowupdate']) && ($options['allowupdate'])) {
                     $url = new moodle_url('view.php',
-                            array('id' => $coursemoduleid, 'action' => 'delchoice', 'sesskey' => sesskey()));
-                    $html .= html_writer::link($url, get_string('removemychoice', 'choice'), array('class' => 'ml-1'));
+                            ['id' => $coursemoduleid, 'action' => 'delchoice', 'sesskey' => sesskey()]);
+                    $html .= html_writer::link($url, get_string('removemychoice', 'choice'), ['class' => 'ml-1']);
                 }
             } else {
                 $html .= html_writer::tag('label', get_string('havetologin', 'choice'));
