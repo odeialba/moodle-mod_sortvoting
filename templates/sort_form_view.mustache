@@ -19,6 +19,7 @@
 
     Example context (json):
     {
+        "sortvotingid": "1",
         "options": [
             {
                 "id": "1",
@@ -48,8 +49,16 @@
         ]
     }
 }}
+<input type="hidden" name="sortvotingid" value="{{sortvotingid}}" />
 {{#options}}
     <li>
-        <input type="number" name="option[{{id}}]" value="{{defaultposition}}" max="{{max}}" />{{text}}
+        <input type="number" name="option[]" data-optionid="{{id}}" value="{{defaultposition}}" max="{{max}}" />{{text}}
     </li>
 {{/options}}
+
+<button class="btn btn-primary" data-action="savevote" title="{{save}}">{{save}}Save</button>
+{{#js}}
+    require(['mod_sortvoting/sortvoting'], function(sortvoting) {
+        sortvoting.init();
+    });
+{{/js}}

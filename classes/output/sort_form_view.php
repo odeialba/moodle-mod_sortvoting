@@ -59,6 +59,6 @@ class sort_form_view implements \templatable, \renderable {
             ];
         }
 
-        return ['options' => $optionsclean, 'max' => count($options)];
+        return ['sortvotingid' => $this->sortvoting->id, 'options' => $optionsclean, 'max' => count($options)];
     }
 }

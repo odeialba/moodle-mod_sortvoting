@@ -13,8 +13,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace mod_sortvoting\output;
-use html_writer;
-use moodle_url;
 
 /**
  * Renderer class.
@@ -24,89 +22,4 @@ use moodle_url;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends \plugin_renderer_base {
-    /**
-     * Returns HTML to display choices of option
-     * @param array $options
-     * @param int  $coursemoduleid
-     * @param bool $vertical
-     * @return string
-     */
-    public function display_options2($options, $coursemoduleid, $vertical = false, $multiple = false) {
-        // $layoutclass = 'horizontal';
-        // if ($vertical) {
-        $layoutclass = 'vertical';
-        // }
-        $target = new moodle_url('/mod/sortvoting/view.php');
-        $attributes = ['method'=>'POST', 'action'=>$target, 'class'=> $layoutclass];
-        $disabled = empty($options['previewonly']) ? [] : ['disabled' => 'disabled'];
-
-        $html = html_writer::start_tag('form', $attributes);
-        $html .= html_writer::start_tag('ul', ['class' => 'choices list-unstyled unstyled']);
-
-        $availableoption = count($options['options']);
-        $choicecount = 0;
-        foreach ($options['options'] as $option) {
-            $choicecount++;
-            $html .= html_writer::start_tag('li', ['class' => 'option mr-3']);
-            if ($multiple) {
-                $option->attributes->name = 'answer[]';
-                $option->attributes->type = 'checkbox';
-            } else {
-                $option->attributes->name = 'answer';
-                $option->attributes->type = 'radio';
-            }
-            $option->attributes->id = 'choice_'.$choicecount;
-            $option->attributes->class = 'mx-1';
-
-            $labeltext = $option->text;
-            if (!empty($option->attributes->disabled)) {
-                $labeltext .= ' ' . get_string('full', 'choice');
-                $availableoption--;
-            }
-
-            if (!empty($options['limitanswers']) && !empty($options['showavailable'])) {
-                $labeltext .= html_writer::empty_tag('br');
-                $labeltext .= get_string("responsesa", "choice", $option->countanswers);
-                $labeltext .= html_writer::empty_tag('br');
-                $labeltext .= get_string("limita", "choice", $option->maxanswers);
-            }
-
-            $html .= html_writer::empty_tag('input', (array)$option->attributes + $disabled);
-            $html .= html_writer::tag('label', $labeltext, ['for'=>$option->attributes->id]);
-            $html .= html_writer::end_tag('li');
-        }
-        $html .= html_writer::tag('li','', ['class'=>'clearfloat']);
-        $html .= html_writer::end_tag('ul');
-        $html .= html_writer::tag('div', '', ['class'=>'clearfloat']);
-        $html .= html_writer::empty_tag('input', ['type'=>'hidden', 'name'=>'sesskey', 'value'=>sesskey()]);
-        $html .= html_writer::empty_tag('input', ['type'=>'hidden', 'name'=>'action', 'value'=>'makechoice']);
-        $html .= html_writer::empty_tag('input', ['type'=>'hidden', 'name'=>'id', 'value'=>$coursemoduleid]);
-
-        if (empty($options['previewonly'])) {
-            if (!empty($options['hascapability']) && ($options['hascapability'])) {
-                if ($availableoption < 1) {
-                    $html .= html_writer::tag('label', get_string('choicefull', 'choice'));
-                } else {
-                    $html .= html_writer::empty_tag('input', [
-                        'type' => 'submit',
-                        'value' => get_string('savemychoice', 'choice'),
-                        'class' => 'btn btn-primary'
-                    ]);
-                }
-
-                if (!empty($options['allowupdate']) && ($options['allowupdate'])) {
-                    $url = new moodle_url('view.php',
-                            ['id' => $coursemoduleid, 'action' => 'delchoice', 'sesskey' => sesskey()]);
-                    $html .= html_writer::link($url, get_string('removemychoice', 'choice'), ['class' => 'ml-1']);
-                }
-            } else {
-                $html .= html_writer::tag('label', get_string('havetologin', 'choice'));
-            }
-        }
-
-        $html .= html_writer::end_tag('ul');
-        $html .= html_writer::end_tag('form');
-
-        return $html;
-    }
 }

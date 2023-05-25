@@ -64,8 +64,6 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // Adding the rest of mod_sortvoting settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        // $mform->addElement('static', 'label1', 'sortvotingsettings', get_string('sortvotingsettings', 'mod_sortvoting'));
-        // $mform->addElement('header', 'sortvotingfieldset', get_string('sortvotingfieldset', 'mod_sortvoting'));
         $mform->addElement('header', 'optionhdr', get_string('options', 'choice'));
 
         $mform->addElement('selectyesno', 'allowupdate', get_string("allowupdate", "choice"));
@@ -121,7 +119,6 @@ class mod_sortvoting_mod_form extends moodleform_mod {
             foreach ($options as $option){
                 $default_values['option['.$key.']'] = $option->text;
                 $default_values['optionid['.$key.']'] = $option->id;
-                // $default_values['optionposition['.$key.']'] = $option->defaultposition;
                 $key++;
             }
         }
