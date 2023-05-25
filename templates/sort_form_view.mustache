@@ -1,0 +1,33 @@
+{{!
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_sortvoting/sort_form_view
+
+    Template for showing list of sessions.
+
+    Example context (json):
+    {
+        "addbuttontitle": "Add session",
+        "addbuttonurl": "#",
+        "intro": "Appointment intro",
+        "sessionslisttable": "<table></table>",
+        "signupsessionid": "1",
+        "cansignup": "true"
+    }
+}}
+{{! create a list of options with input number at the front, with the array of options}}
+{{#options}}
+<input type="int" value="1"> {{{value}}}
+{{/options}}
