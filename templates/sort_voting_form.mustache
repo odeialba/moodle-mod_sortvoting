@@ -13,7 +13,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_sortvoting/sort_form_view
+    @template mod_sortvoting/sort_voting_form
 
     Template for showing list of options to sort.
 
@@ -23,27 +23,27 @@
         "options": [
             {
                 "id": "1",
-                "defaultposition": "1",
+                "position": "1",
                 "text": "A"
             },
             {
                 "id": "2",
-                "defaultposition": "2",
+                "position": "2",
                 "text": "B"
             },
             {
                 "id": "3",
-                "defaultposition": "3",
+                "position": "3",
                 "text": "C"
             },
             {
                 "id": "4",
-                "defaultposition": "4",
+                "position": "4",
                 "text": "D"
             },
             {
                 "id": "5",
-                "defaultposition": "5",
+                "position": "5",
                 "text": "E"
             }
         ]
@@ -52,7 +52,7 @@
 <input type="hidden" name="sortvotingid" value="{{sortvotingid}}" />
 {{#options}}
     <li>
-        <input type="number" name="option[]" data-optionid="{{id}}" value="{{defaultposition}}" max="{{max}}" />{{text}}
+        <input type="number" name="option[]" data-optionid="{{id}}" value="{{position}}" max="{{max}}" min="1" />{{text}}
     </li>
 {{/options}}
 

@@ -1,16 +1,18 @@
 <?php
-// This program is free software: you can redistribute it and/or modify
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Library of interface functions and constants.
@@ -42,7 +44,7 @@ function sortvoting_supports($feature) {
  * in mod_form.php) this function will create a new instance and return the id
  * number of the instance.
  *
- * @param object $moduleinstance An object from the form.
+ * @param object $sortvoting An object from the form.
  * @param mod_sortvoting_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
@@ -50,17 +52,13 @@ function sortvoting_add_instance($sortvoting, $mform = null) {
     global $DB;
 
     $sortvoting->timecreated = time();
-
-    //insert answers
     $sortvoting->id = $DB->insert_record('sortvoting', $sortvoting);
-    // $defaultposition = 1;
     foreach ($sortvoting->option as $key => $value) {
         $value = trim($value);
         if (isset($value) && $value <> '') {
             $option = new stdClass();
             $option->text = $value;
             $option->sortvotingid = $sortvoting->id;
-            // $option->defaultposition = $defaultposition++;
             $option->timemodified = time();
             $DB->insert_record("sortvoting_options", $option);
         }
@@ -78,7 +76,7 @@ function sortvoting_add_instance($sortvoting, $mform = null) {
  * Given an object containing all the necessary data (defined in mod_form.php),
  * this function will update an existing instance with new data.
  *
- * @param object $moduleinstance An object from the form in mod_form.php.
+ * @param object $sortvoting An object from the form in mod_form.php.
  * @param mod_sortvoting_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
@@ -88,26 +86,22 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
     $sortvoting->timemodified = time();
     $sortvoting->id = $sortvoting->instance;
 
-    //update, delete or insert answers
     // TODO: Check this. Maybe it can be done with a simple array instead of that thing from data processing.
-    // $defaultposition = 1;
     foreach ($sortvoting->option as $key => $value) {
         $value = trim($value);
         $option = new stdClass();
         $option->text = $value;
         $option->sortvotingid = $sortvoting->id;
-        // $option->defaultposition = $defaultposition++;
         $option->timemodified = time();
-        if (isset($sortvoting->optionid[$key]) && !empty($sortvoting->optionid[$key])){//existing sortvoting record
+        if (isset($sortvoting->optionid[$key]) && !empty($sortvoting->optionid[$key])) {
             $option->id = $sortvoting->optionid[$key];
             if (isset($value) && $value <> '') {
                 $DB->update_record("sortvoting_options", $option);
             } else {
+                // Delete any answers associated with this option.
+                $DB->delete_records("sortvoting_answers", ["sortvotingid" => $sortvoting->id, "optionid" => $option->id]);
                 // Remove the empty (unused) option.
                 $DB->delete_records("sortvoting_options", ["id" => $option->id]);
-                // Delete any answers associated with this option.
-                // TODO: Play with answers.
-                // $DB->delete_records("sortvoting_answers", array("votingid" => $sortvoting->id, "optionid" => $option->id));
             }
         } else {
             if (isset($value) && $value <> '') {

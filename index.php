@@ -1,16 +1,18 @@
 <?php
-// This program is free software: you can redistribute it and/or modify
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Display information about all the mod_sortvoting modules in the requested course.
@@ -57,13 +59,13 @@ $table = new html_table();
 $table->attributes['class'] = 'generaltable mod_index';
 
 if ($course->format == 'weeks') {
-    $table->head  = [get_string('week'), get_string('name')];
+    $table->head = [get_string('week'), get_string('name')];
     $table->align = ['center', 'left'];
 } else if ($course->format == 'topics') {
-    $table->head  = [get_string('topic'), get_string('name')];
+    $table->head = [get_string('topic'), get_string('name')];
     $table->align = ['center', 'left', 'left', 'left'];
 } else {
-    $table->head  = [get_string('name')];
+    $table->head = [get_string('name')];
     $table->align = ['left', 'left', 'left'];
 }
 

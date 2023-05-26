@@ -1,15 +1,17 @@
-// This program is free software: you can redistribute it and/or modify
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * AMD module used when saving a new sort voting.
@@ -34,13 +36,26 @@ const saveVote = function(saveSortVoteElement) {
     saveSortVoteElement.setAttribute('disabled', true);
     var sortvotingid = document.getElementsByName('sortvotingid')[0].value;
     var options = document.getElementsByName('option[]');
+
+    // Build votes and positions arrays for later processing.
     var votes = [];
+    var positions = [];
     options.forEach(function (option) {
+        positions.push(option.value);
         votes.push({
             'position': option.value,
             'optionid': option.getAttribute('data-optionid')
         });
     });
+
+    // Check if all elements of the positions array are unique.
+    if (new Set(positions).size !== positions.length) {
+        window.alert('All positions must be unique');
+        saveSortVoteElement.removeAttribute('disabled');
+        return;
+    }
+
+    // Save vote.
     var promises = Ajax.call([
         {methodname: 'mod_sortvoting_save_vote', args: {sortvotingid: sortvotingid, votes: votes}}
     ]);

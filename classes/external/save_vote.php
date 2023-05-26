@@ -1,16 +1,18 @@
 <?php
-// This program is free software: you can redistribute it and/or modify
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 declare(strict_types=1);
 
@@ -65,19 +67,29 @@ class save_vote extends external_api {
             'votes' => $votes
         ]);
 
-        // Signup the user to the session
+        /*$cm = get_coursemodule_from_instance('sortvoting', $params['sortvotingid']);
+        $context = \context_module::instance($cm->id);
+        self::validate_context($context);
+        \mod_sortvoting\permission::require_can_vote($params['sortvotingid'], $context);*/
 
-        // $session = appointment_get_session($params['sortvotingid']);
-        // $cm = get_coursemodule_from_instance('appointment', $session->appointment);
-        // $context = \context_module::instance($cm->id);
+        // Check if the user has already voted and update the vote.
+        $votes = $DB->get_records_menu(
+            'sortvoting_answers',
+            [
+                'sortvotingid' => $params['sortvotingid'],
+                'userid' => $USER->id
+            ],
+            'id ASC', 'optionid, position'
+        );
+        if (!empty($votes)) {
+            $DB->delete_records('sortvoting_answers', ['sortvotingid' => $params['sortvotingid'], 'userid' => $USER->id]);
+        }
 
-        // self::validate_context($context);
-        // \mod_sortvoting\permission::require_can_vote($session, $context);
-
-        // Save votes in sortvoting_answers table
-        // TODO: Check if the user has already voted and update the vote.
+        // Build answers and positions arrays for later processing.
+        $positions = [];
         $answers = [];
         foreach ($params['votes'] as $vote) {
+            $positions[] = $vote['position'];
             $answers[] = [
                 'userid' => $USER->id,
                 'sortvotingid' => $params['sortvotingid'],
@@ -85,6 +97,14 @@ class save_vote extends external_api {
                 'optionid' => $vote['optionid']
             ];
         }
+
+        // TODO: Add translation.
+        // Check if all elements of the positions array are unique.
+        if (count($positions) !== count(array_unique($positions))) {
+            throw new \moodle_exception('duplicatedposition', 'sortvoting');
+        }
+
+        // Save votes in sortvoting_answers table.
         $DB->insert_records('sortvoting_answers', $answers);
 
         return true;

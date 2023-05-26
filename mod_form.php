@@ -1,16 +1,18 @@
 <?php
-// This program is free software: you can redistribute it and/or modify
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * The main mod_sortvoting configuration form.
@@ -41,7 +43,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
-        //-------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -61,7 +63,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         // Adding the standard "intro" and "introformat" fields.
         $this->standard_intro_elements();
 
-        //-------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------
         // Adding the rest of mod_sortvoting settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('header', 'optionhdr', get_string('options', 'choice'));
@@ -72,8 +74,8 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         $repeatarray[] = $mform->createElement('text', 'option', get_string('optionno', 'choice'));
         $repeatarray[] = $mform->createElement('hidden', 'optionid', 0);
 
-        if ($this->_instance){
-            $repeatno = $DB->count_records('sortvoting_options', ['sortvotingid'=>$this->_instance]);
+        if ($this->_instance) {
+            $repeatno = $DB->count_records('sortvoting_options', ['sortvotingid' => $this->_instance]);
             $repeatno += 2;
         } else {
             $repeatno = 5;
@@ -87,7 +89,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         $this->repeat_elements($repeatarray, $repeatno,
                     $repeateloptions, 'option_repeats', 'option_add_fields', 3, null, true);
 
-        // Make the first two options required
+        // Make the first two options required.
         if ($mform->elementExists('option[0]')) {
             $mform->addRule('option[0]', get_string('atleastoneoption', 'choice'), 'required', null, 'client');
         }
@@ -95,7 +97,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
             $mform->addRule('option[1]', get_string('atleastoneoption', 'choice'), 'required', null, 'client');
         }
 
-        //-------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
@@ -110,29 +112,18 @@ class mod_sortvoting_mod_form extends moodleform_mod {
      * @param array $defaultvalues Form defaults
      * @return void
      **/
-    public function data_preprocessing(&$default_values) {
+    public function data_preprocessing(&$defaultvalues) {
         global $DB;
-        if (!empty($this->_instance) && ($options = $DB->get_records('sortvoting_options', ['sortvotingid' => $this->_instance], 'id ASC'))) {
+        if (!empty($this->_instance) &&
+                ($options = $DB->get_records('sortvoting_options', ['sortvotingid' => $this->_instance], 'id ASC'))) {
 
             $key = 0;
             // TODO: Maybe we can just use normal array without the $key.
-            foreach ($options as $option){
-                $default_values['option['.$key.']'] = $option->text;
-                $default_values['optionid['.$key.']'] = $option->id;
+            foreach ($options as $option) {
+                $defaultvalues['option['.$key.']'] = $option->text;
+                $defaultvalues['optionid['.$key.']'] = $option->id;
                 $key++;
             }
         }
-    }
-
-    /**
-     * Allows module to modify the data returned by form get_data().
-     * This method is also called in the bulk activity completion form.
-     *
-     * Only available on moodleform_mod.
-     *
-     * @param stdClass $data the form data to be modified.
-     */
-    public function data_postprocessing($data) {
-        parent::data_postprocessing($data);
     }
 }

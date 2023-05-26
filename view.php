@@ -1,16 +1,18 @@
 <?php
-// This program is free software: you can redistribute it and/or modify
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Prints an instance of mod_sortvoting.
@@ -47,34 +49,21 @@ $PAGE->set_title(format_string($sortvoting->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-// echo $OUTPUT->header();
+// TODO: Check if we want to include responses from inactive users.
 
-/*if ($notify and confirm_sesskey()) {
-    if ($notify === 'choicesaved') {
-        echo $OUTPUT->notification(get_string('choicesaved', 'choice'), 'notifysuccess');
-    } else if ($notify === 'mustchooseone') {
-        echo $OUTPUT->notification(get_string('mustchooseone', 'choice'), 'notifyproblem');
+$output = $PAGE->get_renderer('mod_sortvoting');
+echo $output->header();
+if (is_enrolled($modulecontext, null, 'mod/sortvoting:choose')) {
+    $votingform = new \mod_sortvoting\output\sort_voting_form($sortvoting);
+    echo $output->render($votingform);
+
+    // Teacher can see results.
+    if (has_capability('mod/sortvoting:readresponses', $modulecontext)) {
+        $votingresults = new \mod_sortvoting\output\sort_voting_results($sortvoting);
+        echo $output->render($votingresults);
     }
-}*/
-
-// Check if we want to include responses from inactive users.
-// $onlyactive = $sortvoting->includeinactive ? false : true;
-
-// Teacher can see results
-/*if (has_capability('mod/sortvoting:readresponses', $modulecontext) && !$PAGE->has_secondary_navigation()) {
-    $allresponses = [];//sortvoting_get_response_data($sortvoting, $cm, $groupmode, $onlyactive);   // Big function, approx 6 SQL calls per user.
-    // choice_show_reportlink($allresponses, $cm);
-}*/
-
-echo '<div class="clearer"></div>';
-
-if (is_enrolled($modulecontext, NULL, 'mod/sortvoting:choose')) {
-    $output = $PAGE->get_renderer('mod_sortvoting');
-    echo $output->header();
-
-    $renderable = new \mod_sortvoting\output\sort_form_view($sortvoting);
-    echo $output->render($renderable);
-    echo $output->footer($course);
 } else {
-    // echo $OUTPUT->notification(get_string('notenrolledchoose', 'sortvoting'), 'notifyproblem');
+    // TODO: Add a message to the user to inform that he is not enrolled in the course.
+    echo $OUTPUT->notification(get_string('notenrolledchoose', 'sortvoting'), 'notifyproblem');
 }
+echo $output->footer($course);
