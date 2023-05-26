@@ -48,8 +48,19 @@
         ]
     }
 }}
-{{#votes}}
-    <li>
-        {{avg}} - {{text}}
-    </li>
-{{/votes}}
+<table border="1">
+    <thead>
+        <tr>
+            <th>Average position</th>
+            <th>Option</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#votes}}
+            <tr>
+                <td>{{avg}}</td>
+                <td>{{text}}</td>
+            </tr>
+        {{/votes}}
+    </tbody>
+</table>
