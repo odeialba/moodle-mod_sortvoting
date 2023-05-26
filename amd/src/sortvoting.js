@@ -23,6 +23,7 @@
 
 import Notification from 'core/notification';
 import Ajax from 'core/ajax';
+// import SortableList from 'core/sortable_list';
 
 const SELECTORS = {
     SAVEVOTE: "[data-action='savevote']"

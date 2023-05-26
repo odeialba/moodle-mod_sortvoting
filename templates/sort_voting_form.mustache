@@ -50,11 +50,15 @@
     }
 }}
 <input type="hidden" name="sortvotingid" value="{{sortvotingid}}" />
+
+{{! Make this list drag and drop sortable. }}
+<ul id="sortvotinglist" style="list-style-type: none;">
 {{#options}}
-    <li>
-        <input type="number" name="option[]" data-optionid="{{id}}" value="{{position}}" max="{{max}}" min="1" />{{text}}
+    <li class="d-flex dropready draggable card" draggable="true" style="cursor: move;">
+        <input type="number" name="option[]" data-optionid="{{id}}" value="{{position}}" max="{{max}}" min="1" />{{text}}<span class="dragicon ml-auto">{{#pix}}i/dragdrop{{/pix}}</span>
     </li>
 {{/options}}
+</ul>
 
 <button class="btn btn-primary" data-action="savevote" title="{{save}}">{{save}}Save</button>
 {{#js}}
