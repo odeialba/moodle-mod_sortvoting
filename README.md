@@ -11,7 +11,7 @@ The problem with the ordinary voting (selecting A or B) is that if many people h
 
 ### Traditional voting: ###
 
-**Votes:**
+#### Votes: ####
 
 - User1 = A
 - User2 = A
@@ -19,20 +19,20 @@ The problem with the ordinary voting (selecting A or B) is that if many people h
 - User4 = C
 - User5 = D
 
-**Results in traditional voting:**
+#### Results in traditional voting: ####
 
 - A = 2
 - B = 1
 - C = 1
 - D = 1
 
-**Explanation**
+#### Explanation: ####
 
 A gets 2 votes from user1 and user2 and all the other options get one vote each. Users 3, 4 and 5 might prefer to have the option B before having the option A, but since the majority voted for A, A will be the winner.
 
 ### Voting with the plugin: ###
 
-**Votes:**
+#### Votes: ####
 
 - User1:
     - A
@@ -60,14 +60,14 @@ A gets 2 votes from user1 and user2 and all the other options get one vote each.
     - C
     - A
 
-**Results voting with the plugin:**
+#### Results voting with the plugin: ####
 
 - B
 - D
 - C
 - A
 
-**Explanation**
+#### Explanation: ####
 
 If we calculate the average position of the options in the votes the winner would be B.
 
