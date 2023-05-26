@@ -1,8 +1,77 @@
-# sortvoting #
+# SortVoting #
 
-TODO Describe the plugin shortly here.
+This plugin allows sorting a list of options by preference of the user, instead of just selecting one.
 
-TODO Provide more detailed description here.
+The problem with the ordinary voting (selecting A or B) is that if many people hate the winning option but the majority votes for it, it will win. This plugin will allow users to set in order the preference of multiple options.
+
+## Examples: ##
+**Setup:**
+- Available options A, B, C, D
+- People voting 5
+
+### Traditional voting: ###
+
+**Votes:**
+
+- User1 = A
+- User2 = A
+- User3 = B
+- User4 = C
+- User5 = D
+
+**Results in traditional voting:**
+
+- A = 2
+- B = 1
+- C = 1
+- D = 1
+
+**Explanation**
+
+A gets 2 votes from user1 and user2 and all the other options get one vote each. Users 3, 4 and 5 might prefer to have the option B before having the option A, but since the majority voted for A, A will be the winner.
+
+### Voting with the plugin: ###
+
+**Votes:**
+
+- User1:
+    - A
+    - B
+    - C
+    - D
+- User2:
+    - A
+    - B
+    - D
+    - C
+- User3:
+    - B
+    - D
+    - C
+    - A
+- User4:
+    - C
+    - B
+    - D
+    - A
+- User5:
+    - D
+    - B
+    - C
+    - A
+
+**Results voting with the plugin:**
+
+- B
+- D
+- C
+- A
+
+**Explanation**
+
+If we calculate the average position of the options in the votes the winner would be B.
+
+
 
 ## Installing via uploaded ZIP file ##
 
