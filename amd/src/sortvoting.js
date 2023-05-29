@@ -23,7 +23,8 @@
 
 import Notification from 'core/notification';
 import Ajax from 'core/ajax';
-// import SortableList from 'core/sortable_list';
+import SortableList from 'core/sortable_list';
+import jQuery from 'jquery';
 
 const SELECTORS = {
     SAVEVOTE: "[data-action='savevote']"
@@ -66,9 +67,31 @@ const saveVote = function(saveSortVoteElement) {
 };
 
 /**
+ * Sets up sortable list in the column sort order page.
+ */
+const setupSortableLists = () => {
+    new SortableList('#sortvotinglist', {
+        moveHandlerSelector: '.optionitem',
+    });
+    // Listen to the events when element is dragged.
+    jQuery('ul#sortvotinglist > *').on(SortableList.EVENTS.DROP, function (evt, info) {
+        if (info.positionChanged) {
+            // Get the ul element and loop into the li elements.
+            var list = info.sourceList[0];
+            var lis = list.getElementsByTagName('li');
+            for (var i = 0; i < lis.length; i++) {
+                // Set the value of the input to the position of the li element.
+                lis[i].getElementsByTagName('input')[0].value = i + 1;
+            }
+        }
+    });
+};
+
+/**
  * Init page
  */
 export function init() {
+    setupSortableLists();
     document.addEventListener('click', event => {
 
         // Save sort vote.
