@@ -55,7 +55,11 @@
 <ul id="sortvotinglist" class="fa-ul">
 {{#options}}
     <li class="d-flex optionitem dropready draggable card p-3 mb-2" data-drag-type="move" draggable="true">
-        <div><input type="number" name="option[]" data-optionid="{{id}}" value="{{position}}" max="{{max}}" min="1" class="d-none" /><span class="float-right dragicon ml-auto">{{#pix}}i/dragdrop{{/pix}}</span>{{text}}</div>
+        <div>
+            <input type="number" name="option[]" data-optionid="{{id}}" value="{{position}}" max="{{max}}" min="1" class="d-none" />
+            <span class="float-right dragicon ml-auto">{{#pix}}i/dragdrop{{/pix}}</span>
+            {{text}}
+        </div>
     </li>
 {{/options}}
 </ul>
