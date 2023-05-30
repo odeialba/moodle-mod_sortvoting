@@ -49,10 +49,9 @@ echo $OUTPUT->header();
 $modulenameplural = get_string('modulenameplural', 'mod_sortvoting');
 echo $OUTPUT->heading($modulenameplural);
 
-$sortvotings = get_all_instances_in_course('sortvoting', $course);
-
-if (empty($sortvotings)) {
-    notice(get_string('no$sortvotinginstances', 'mod_sortvoting'), new moodle_url('/course/view.php', ['id' => $course->id]));
+if (!$sortvotings = get_all_instances_in_course('sortvoting', $course)) {
+    notice(get_string('thereareno', 'moodle', $modulenameplural), new moodle_url('/course/view.php', ['id' => $course->id]));
+    die;
 }
 
 $table = new html_table();

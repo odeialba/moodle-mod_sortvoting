@@ -132,7 +132,11 @@ function sortvoting_delete_instance($id) {
 
     $result = true;
 
-    if (! $DB->delete_records('sortvoting_options', ['votingid' => $id])) {
+    if (! $DB->delete_records('sortvoting_answers', ['sortvotingid' => $id])) {
+        $result = false;
+    }
+
+    if (! $DB->delete_records('sortvoting_options', ['sortvotingid' => $id])) {
         $result = false;
     }
 
