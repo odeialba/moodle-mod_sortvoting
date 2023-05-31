@@ -25,6 +25,7 @@ import Notification from 'core/notification';
 import Ajax from 'core/ajax';
 import SortableList from 'core/sortable_list';
 import jQuery from 'jquery';
+import {get_string as getString} from 'core/str';
 
 const SELECTORS = {
     SAVEVOTE: "[data-action='savevote']"
@@ -52,7 +53,7 @@ const saveVote = function(saveSortVoteElement) {
 
     // Check if all elements of the positions array are unique.
     if (new Set(positions).size !== positions.length) {
-        window.alert('All positions must be unique');
+        window.alert(getString('errorduplicatedposition', 'mod_sortvoting'));
         saveSortVoteElement.removeAttribute('disabled');
         return;
     }

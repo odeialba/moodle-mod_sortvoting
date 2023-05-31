@@ -30,7 +30,7 @@ $functions = [
         'classname' => save_vote::class,
         'description' => 'Save users sort vote',
         'type' => 'write',
-        'capabilities' => 'mod/sortvoting:choose',
+        'capabilities' => 'mod/sortvoting:vote',
         'ajax' => true,
     ],
 ];

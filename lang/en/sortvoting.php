@@ -26,11 +26,24 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['allowupdate'] = 'Allow options to be updated';
+$string['allowupdate_help'] = 'If enabled, users will be able to update their votes once it is submitted.
+
+If new options are added, users will be able to update the votes even when they have already submitted them. (Even when this option is disabled)';
+$string['atleasttwooptions'] = 'You need to provide at least two options.';
+$string['averageposition'] = 'Average position';
+$string['sortoptions'] = 'Sort options';
+$string['notenrolledsort'] = 'Sorry, only enrolled users are allowed to sort.';
+$string['sortoptions_help'] = 'Here is where you specify the options that participants have to sort.
+
+You can fill in any number of these. If you leave some of the options blank, they will not be displayed. If you need more than 8 options, click the "Add 3 fields to form" button.';
+$string['errorduplicatedposition'] = 'All positions must be unique.';
 $string['pluginname'] = 'Sort Voting';
 $string['modulename'] = 'Sort Voting';
 $string['modulenameplural'] = 'Sort Votings';
+$string['option'] = 'Option';
+$string['optionno'] = 'Option {no}';
+$string['options'] = 'Options';
 $string['pluginadministration'] = 'Sort Voting administration';
 $string['sortvotingname'] = 'Voting name';
 $string['sortvotingsettings'] = 'Voting name';
-$string['sortvotingfieldset'] = '';
-$string['sortvotingname_help'] = '';
+$string['sortvotingname_help'] = 'This will be the name used to identify this element in the course view.';

@@ -22,6 +22,7 @@ use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
+use moodle_exception;
 
 /**
  * External function save_vote for mod_sortvoting.
@@ -72,19 +73,6 @@ class save_vote extends external_api {
         self::validate_context($context);
         \mod_sortvoting\permission::require_can_vote($params['sortvotingid'], $context);*/
 
-        // Check if the user has already voted and update the vote.
-        $votes = $DB->get_records_menu(
-            'sortvoting_answers',
-            [
-                'sortvotingid' => $params['sortvotingid'],
-                'userid' => $USER->id
-            ],
-            'id ASC', 'optionid, position'
-        );
-        if (!empty($votes)) {
-            $DB->delete_records('sortvoting_answers', ['sortvotingid' => $params['sortvotingid'], 'userid' => $USER->id]);
-        }
-
         // Build answers and positions arrays for later processing.
         $positions = [];
         $answers = [];
@@ -98,10 +86,22 @@ class save_vote extends external_api {
             ];
         }
 
-        // TODO: Add translation.
         // Check if all elements of the positions array are unique.
         if (count($positions) !== count(array_unique($positions))) {
-            throw new \moodle_exception('duplicatedposition', 'sortvoting');
+            throw new moodle_exception('errorduplicatedposition', 'sortvoting');
+        }
+
+        // Check if the user has already voted and update the vote.
+        $existingvotes = $DB->get_records_menu(
+            'sortvoting_answers',
+            [
+                'sortvotingid' => $params['sortvotingid'],
+                'userid' => $USER->id
+            ],
+            'id ASC', 'optionid, position'
+        );
+        if (!empty($existingvotes)) {
+            $DB->delete_records('sortvoting_answers', ['sortvotingid' => $params['sortvotingid'], 'userid' => $USER->id]);
         }
 
         // Save votes in sortvoting_answers table.

@@ -49,7 +49,7 @@ class sort_voting_form implements \templatable, \renderable {
         global $DB, $USER;
 
         $options = $DB->get_records('sortvoting_options', ['sortvotingid' => $this->sortvoting->id], 'id ASC');
-        $votes = $DB->get_records_menu(
+        $existingvotes = $DB->get_records_menu(
             'sortvoting_answers',
             [
                 'sortvotingid' => $this->sortvoting->id,
@@ -59,10 +59,15 @@ class sort_voting_form implements \templatable, \renderable {
             'optionid, position'
         );
 
-        $defaultposition = (count($votes) > 0) ? count($votes) : 0;
+        $allowupdate = true;
+        if (!$this->sortvoting->allowupdate && count($existingvotes) === count($options)) {
+            $allowupdate = false;
+        }
+
+        $defaultposition = (count($existingvotes) > 0) ? count($existingvotes) : 0;
         $optionsclean = [];
         foreach ($options as $option) {
-            $position = isset($votes[$option->id]) ? $votes[$option->id] : $defaultposition++;
+            $position = isset($existingvotes[$option->id]) ? $existingvotes[$option->id] : $defaultposition++;
             $optionsclean[] = [
                 'id' => $option->id,
                 'text' => $option->text,
@@ -75,6 +80,11 @@ class sort_voting_form implements \templatable, \renderable {
             return $a['position'] <=> $b['position'];
         });
 
-        return ['sortvotingid' => $this->sortvoting->id, 'options' => $optionsclean, 'max' => count($options)];
+        return [
+            'sortvotingid' => $this->sortvoting->id,
+            'allowupdate' => $allowupdate,
+            'options' => $optionsclean,
+            'max' => count($options)
+        ];
     }
 }

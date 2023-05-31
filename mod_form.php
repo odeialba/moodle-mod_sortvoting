@@ -66,12 +66,15 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         // -------------------------------------------------------------------------------
         // Adding the rest of mod_sortvoting settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('header', 'optionhdr', get_string('options', 'choice'));
+        $mform->addElement('header', 'optionhdr', get_string('options', 'sortvoting'));
+        $string['optionno'] = 'Option {no}';
+        $string['options'] = 'Options';
 
-        $mform->addElement('selectyesno', 'allowupdate', get_string("allowupdate", "choice"));
+        $mform->addElement('selectyesno', 'allowupdate', get_string("allowupdate", "sortvoting"));
+        $mform->addHelpButton('allowupdate', 'allowupdate', 'mod_sortvoting');
 
         $repeatarray = [];
-        $repeatarray[] = $mform->createElement('text', 'option', get_string('optionno', 'choice'));
+        $repeatarray[] = $mform->createElement('text', 'option', get_string('optionno', 'sortvoting'));
         $repeatarray[] = $mform->createElement('hidden', 'optionid', 0);
 
         if ($this->_instance) {
@@ -81,7 +84,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
             $repeatno = 5;
         }
 
-        $repeateloptions['option']['helpbutton'] = ['choiceoptions', 'choice'];
+        $repeateloptions['option']['helpbutton'] = ['sortoptions', 'sortvoting'];
         $mform->setType('option', PARAM_CLEANHTML);
 
         $mform->setType('optionid', PARAM_INT);
@@ -91,10 +94,10 @@ class mod_sortvoting_mod_form extends moodleform_mod {
 
         // Make the first two options required.
         if ($mform->elementExists('option[0]')) {
-            $mform->addRule('option[0]', get_string('atleastoneoption', 'choice'), 'required', null, 'client');
+            $mform->addRule('option[0]', get_string('atleasttwooptions', 'sortvoting'), 'required', null, 'client');
         }
         if ($mform->elementExists('option[1]')) {
-            $mform->addRule('option[1]', get_string('atleastoneoption', 'choice'), 'required', null, 'client');
+            $mform->addRule('option[1]', get_string('atleasttwooptions', 'sortvoting'), 'required', null, 'client');
         }
 
         // -------------------------------------------------------------------------------

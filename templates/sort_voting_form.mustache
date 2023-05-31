@@ -20,6 +20,7 @@
     Example context (json):
     {
         "sortvotingid": "1",
+        "allowupdate": true,
         "options": [
             {
                 "id": "1",
@@ -54,7 +55,7 @@
 {{! Make this list drag and drop sortable. }}
 <ul id="sortvotinglist" class="fa-ul">
 {{#options}}
-    <li class="d-flex optionitem dropready draggable card p-3 mb-2" data-drag-type="move" draggable="true">
+    <li class="d-flex card p-3 mb-2 {{#allowupdate}}optionitem draggable{{/allowupdate}}" {{#allowupdate}}data-drag-type="move" draggable="true"{{/allowupdate}}>
         <div>
             <input type="number" name="option[]" data-optionid="{{id}}" value="{{position}}" max="{{max}}" min="1" class="d-none" />
             <span class="float-right dragicon ml-auto">{{#pix}}i/dragdrop{{/pix}}</span>
@@ -63,10 +64,11 @@
     </li>
 {{/options}}
 </ul>
-
-<button class="btn btn-primary" data-action="savevote" title="{{save}}">{{save}}Save</button>
-{{#js}}
-    require(['mod_sortvoting/sortvoting'], function(sortvoting) {
-        sortvoting.init();
-    });
-{{/js}}
+{{#allowupdate}}
+    <button class="btn btn-primary" data-action="savevote" title="{{#str}} save {{/str}}">{{#str}} save {{/str}}</button>
+    {{#js}}
+        require(['mod_sortvoting/sortvoting'], function(sortvoting) {
+            sortvoting.init();
+        });
+    {{/js}}
+{{/allowupdate}}

@@ -57,8 +57,8 @@ class sort_voting_results implements \templatable, \renderable {
                 WHERE so.sortvotingid = :sortvotingid
                 GROUP BY so.id
                 ORDER BY avg ASC";
-        $votes = $DB->get_records_sql($sql, ['sortvotingid' => $this->sortvoting->id]);
+        $existingvotes = $DB->get_records_sql($sql, ['sortvotingid' => $this->sortvoting->id]);
 
-        return ['votes' => array_values($votes)];
+        return ['votes' => array_values($existingvotes)];
     }
 }

@@ -53,7 +53,7 @@ $PAGE->set_context($modulecontext);
 
 $output = $PAGE->get_renderer('mod_sortvoting');
 echo $output->header();
-if (is_enrolled($modulecontext, null, 'mod/sortvoting:choose')) {
+if (is_enrolled($modulecontext, null, 'mod/sortvoting:vote')) {
     $votingform = new \mod_sortvoting\output\sort_voting_form($sortvoting);
     echo $output->render($votingform);
 
@@ -63,7 +63,6 @@ if (is_enrolled($modulecontext, null, 'mod/sortvoting:choose')) {
         echo $output->render($votingresults);
     }
 } else {
-    // TODO: Add a message to the user to inform that he is not enrolled in the course.
-    echo $OUTPUT->notification(get_string('notenrolledchoose', 'sortvoting'), 'notifyproblem');
+    echo $OUTPUT->notification(get_string('notenrolledsort', 'sortvoting'), 'notifyproblem');
 }
 echo $output->footer($course);

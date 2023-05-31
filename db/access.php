@@ -28,7 +28,6 @@ $capabilities = [
 
     'mod/sortvoting:addinstance' => [
         'riskbitmask' => RISK_XSS,
-
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
@@ -38,8 +37,7 @@ $capabilities = [
         'clonepermissionsfrom' => 'moodle/course:manageactivities'
     ],
 
-    'mod/sortvoting:choose' => [
-
+    'mod/sortvoting:vote' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -50,7 +48,6 @@ $capabilities = [
     ],
 
     'mod/sortvoting:readresponses' => [
-
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -61,19 +58,7 @@ $capabilities = [
     ],
 
     'mod/sortvoting:deleteresponses' => [
-
         'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ]
-    ],
-
-    'mod/sortvoting:downloadresponses' => [
-
-        'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
