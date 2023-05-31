@@ -68,10 +68,10 @@ class save_vote extends external_api {
             'votes' => $votes
         ]);
 
-        /*$cm = get_coursemodule_from_instance('sortvoting', $params['sortvotingid']);
+        $cm = get_coursemodule_from_instance('sortvoting', $params['sortvotingid']);
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
-        \mod_sortvoting\permission::require_can_vote($params['sortvotingid'], $context);*/
+        \mod_sortvoting\permission::require_can_vote($context);
 
         // Build answers and positions arrays for later processing.
         $positions = [];

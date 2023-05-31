@@ -24,6 +24,7 @@
 import Notification from 'core/notification';
 import Ajax from 'core/ajax';
 import SortableList from 'core/sortable_list';
+import {add as toastAdd} from 'core/toast';
 import jQuery from 'jquery';
 import {get_string as getString} from 'core/str';
 
@@ -62,8 +63,13 @@ const saveVote = function(saveSortVoteElement) {
     var promises = Ajax.call([
         {methodname: 'mod_sortvoting_save_vote', args: {sortvotingid: sortvotingid, votes: votes}}
     ]);
-    promises[0].done(function() {
-        window.location.reload();
+    promises[0].done(function(result) {
+        if (result) {
+            toastAdd(getString('votesuccess', 'mod_sortvoting'), {type: 'success'});
+        } else {
+            toastAdd(getString('voteerror', 'mod_sortvoting'), { type: 'danger' });
+        }
+        saveSortVoteElement.removeAttribute('disabled');
     }).fail(Notification.exception);
 };
 

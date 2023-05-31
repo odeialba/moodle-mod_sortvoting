@@ -14,14 +14,33 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_sortvoting\event;
+namespace mod_sortvoting;
 
 /**
- * The mod_sortvoting instance list viewed event class.
+ * Class permission to perform permission checks.
  *
  * @package     mod_sortvoting
  * @copyright   2023 Odei Alba <odeialba@odeialba.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
+class permission {
+
+    /**
+     * User can vote.
+     *
+     * @param \context_module $context
+     * @return bool
+     */
+    public static function can_vote(\context_module $context): bool {
+        return has_capability('mod/sortvoting:vote', $context);
+    }
+
+    /**
+     * Make sure user can vote.
+     *
+     * @param \context_module $context
+     */
+    public static function require_can_vote(\context_module $context) {
+        require_capability('mod/sortvoting:vote', $context);
+    }
 }
