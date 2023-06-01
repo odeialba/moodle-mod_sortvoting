@@ -1,5 +1,4 @@
 <?php
-use stdClass;
 // This file is part of the mod_sortvoting plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,8 +22,13 @@ use stdClass;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once($CFG->libdir . '/completionlib.php');
+
 define('SORTVOTING_EVENT_TYPE_OPEN', 'open');
 define('SORTVOTING_EVENT_TYPE_CLOSE', 'close');
+
+use mod_sortvoting\completion\custom_completion;
+use stdClass;
 
 /**
  * Return if the plugin supports $feature.
@@ -169,10 +173,10 @@ function sortvoting_delete_instance($id) {
  * @param stdClass $sortvoting the selected sortvoting.
  * @param array $votes submitted votes.
  * @param stdClass $course current course.
- * @param stdClass $cm course context.
+ * @param cm_info|stdClass $cm course context.
  * @return void
  */
-function sortvoting_user_submit_response(stdClass $sortvoting, array $votes, stdClass $course, stdClass $cm) {
+function sortvoting_user_submit_response($sortvoting, array $votes, $course, $cm) {
     global $DB, $USER;
 
     // Build answers and positions arrays for later processing.
@@ -218,14 +222,59 @@ function sortvoting_user_submit_response(stdClass $sortvoting, array $votes, std
  *
  * @param stdClass $sortvoting
  * @param stdClass $course
- * @param stdClass $cm
+ * @param cm_info|stdClass $cm
  * @return void
  */
-function sortvoting_update_completion(stdClass $sortvoting, stdClass $course, stdClass $cm) {
+function sortvoting_update_completion($sortvoting, $course, $cm) {
     $completion = new \completion_info($course);
     if ($completion->is_enabled($cm) && $sortvoting->completionsubmit) {
         $completion->update_state($cm, COMPLETION_COMPLETE);
     }
+}
+
+/**
+ * Add a get_coursemodule_info function in case any sortvoting type wants to add 'extra' information
+ * for the course (see resource).
+ *
+ * Given a course_module object, this function returns any "extra" information that may be needed
+ * when printing this activity in a course listing.  See get_array_of_activities() in course/lib.php.
+ *
+ * @param stdClass $coursemodule The coursemodule object (record).
+ * @return cached_cm_info|false An object on information that the courses
+ *                        will know about (most noticeably, an icon).
+ */
+function sortvoting_get_coursemodule_info($coursemodule) {
+    global $DB;
+
+    $dbparams = ['id' => $coursemodule->instance];
+    $customcompletionfields = custom_completion::get_defined_custom_rules();
+    $fieldsarray = array_merge([
+        'id',
+        'name',
+        'intro',
+        'introformat',
+    ], $customcompletionfields);
+    $fields = join(',', $fieldsarray);
+    if (!$sortvoting = $DB->get_record('sortvoting', $dbparams, $fields)) {
+        return false;
+    }
+
+    $result = new cached_cm_info();
+    $result->name = $sortvoting->name;
+
+    if ($coursemodule->showdescription) {
+        // Convert intro to html. Do not filter cached version, filters run at display time.
+        $result->content = format_module_intro('sortvoting', $sortvoting, $coursemodule->id, false);
+    }
+
+    // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
+    if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
+        foreach ($customcompletionfields as $completiontype) {
+            $result->customdata['customcompletionrules'][$completiontype] = (int) $sortvoting->$completiontype;
+        }
+    }
+
+    return $result;
 }
 
 /**

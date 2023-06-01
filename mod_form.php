@@ -153,7 +153,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         $mform->addElement('checkbox', 'completionsubmit', '', get_string('completionsubmit', 'sortvoting'));
         // Enable this completion rule by default.
         $mform->setDefault('completionsubmit', 1);
-        return array('completionsubmit');
+        return ['completionsubmit'];
     }
 
     function completion_rule_enabled($data) {

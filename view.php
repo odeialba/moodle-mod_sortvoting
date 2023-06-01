@@ -36,13 +36,19 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-$event = \mod_sortvoting\event\course_module_viewed::create([
+$params = [
     'objectid' => $sortvoting->id,
     'context' => $modulecontext
-]);
+];
+$event = \mod_sortvoting\event\course_module_viewed::create($params);
+$event->add_record_snapshot('course_modules', $cm);
 $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('sortvoting', $sortvoting);
 $event->trigger();
+
+// Completion update.
+$completion = new completion_info($course);
+$completion->set_module_viewed($cm);
 
 $PAGE->set_url('/mod/sortvoting/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($sortvoting->name));
