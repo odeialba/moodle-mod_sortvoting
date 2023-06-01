@@ -139,7 +139,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
      */
     public function data_postprocessing($data) {
         parent::data_postprocessing($data);
-        // Set up completion section even if checkbox is not ticked
+        // Set up completion section even if checkbox is not ticked.
         if (!empty($data->completionunlocked)) {
             if (empty($data->completionsubmit)) {
                 $data->completionsubmit = 0;
@@ -147,7 +147,12 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         }
     }
 
-    function add_completion_rules() {
+    /**
+     * Add completion rules.
+     *
+     * @return array
+     */
+    public function add_completion_rules() {
         $mform =& $this->_form;
 
         $mform->addElement('checkbox', 'completionsubmit', '', get_string('completionsubmit', 'sortvoting'));
@@ -156,7 +161,13 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         return ['completionsubmit'];
     }
 
-    function completion_rule_enabled($data) {
+    /**
+     * Completion rule enabled.
+     *
+     * @param array $data the form data to be checked.
+     * @return bool
+     */
+    public function completion_rule_enabled($data) {
         return !empty($data['completionsubmit']);
     }
 }

@@ -22,6 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/completionlib.php');
 
 define('SORTVOTING_EVENT_TYPE_OPEN', 'open');
@@ -213,7 +214,7 @@ function sortvoting_user_submit_response($sortvoting, array $votes, $course, $cm
     // Save votes in sortvoting_answers table.
     $DB->insert_records('sortvoting_answers', $answers);
 
-    // Update completion state
+    // Update completion state.
     sortvoting_update_completion($sortvoting, $course, $cm);
 }
 
@@ -307,7 +308,6 @@ function mod_sortvoting_get_completion_active_rule_descriptions($cm) {
 /**
  * Gets a full sortvoting record
  *
- * @global object
  * @param int $sortvotingid
  * @return object|bool The sortvoting or false
  */
@@ -342,7 +342,7 @@ function sortvoting_set_events($sortvoting) {
         $sortvoting->coursemodule = $cm->id;
     }
 
-    // sortvoting start calendar events.
+    // SortVoting start calendar events.
     $event = new stdClass();
     $event->eventtype = SORTVOTING_EVENT_TYPE_OPEN;
     // The SORTVOTING_EVENT_TYPE_OPEN event should only be an action event if no close time is specified.
@@ -384,7 +384,7 @@ function sortvoting_set_events($sortvoting) {
         }
     }
 
-    // sortvoting end calendar events.
+    // SortVoting end calendar events.
     $event = new stdClass();
     $event->type = CALENDAR_EVENT_TYPE_ACTION;
     $event->eventtype = SORTVOTING_EVENT_TYPE_CLOSE;

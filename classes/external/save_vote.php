@@ -117,7 +117,7 @@ class save_vote extends external_api {
         // Save votes in sortvoting_answers table.
         $DB->insert_records('sortvoting_answers', $answers);
 
-        // Update completion state
+        // Update completion state.
         sortvoting_update_completion($sortvoting, $course, $cm);
 
         return true;
