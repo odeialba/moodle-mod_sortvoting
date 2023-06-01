@@ -64,12 +64,21 @@ const saveVote = function(saveSortVoteElement) {
         {methodname: 'mod_sortvoting_save_vote', args: {sortvotingid: sortvotingid, votes: votes}}
     ]);
     promises[0].done(function(result) {
-        if (result) {
+        if (result.success) {
             toastAdd(getString('votesuccess', 'mod_sortvoting'), {type: 'success'});
         } else {
             toastAdd(getString('voteerror', 'mod_sortvoting'), { type: 'danger' });
         }
-        saveSortVoteElement.removeAttribute('disabled');
+        if (result.allowupdate) {
+            saveSortVoteElement.removeAttribute('disabled');
+        } else {
+            saveSortVoteElement.style.display = 'none';
+            jQuery('ul#sortvotinglist > li.optionitem').each(function (index, element) {
+                element.classList.remove('optionitem', 'draggable');
+                element.removeAttribute('draggable');
+                element.removeAttribute('data-drag-type');
+            });
+        }
     }).fail(Notification.exception);
 };
 

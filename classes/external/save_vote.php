@@ -61,7 +61,7 @@ class save_vote extends external_api {
      *
      * @param int $sortvotingid The ID of the session
      * @param array $votes Votes for the positions of the options.
-     * @return bool
+     * @return array
      */
     public static function execute($sortvotingid, $votes) {
         global $DB, $USER;
@@ -81,54 +81,20 @@ class save_vote extends external_api {
 
         sortvoting_user_submit_response($sortvoting, $params['votes'], $course, $cm);
 
-        return true;
-
-        // Build answers and positions arrays for later processing.
-        $positions = [];
-        $answers = [];
-        foreach ($params['votes'] as $vote) {
-            $positions[] = $vote['position'];
-            $answers[] = [
-                'userid' => $USER->id,
-                'sortvotingid' => $params['sortvotingid'],
-                'position' => $vote['position'],
-                'optionid' => $vote['optionid']
-            ];
-        }
-
-        // Check if all elements of the positions array are unique.
-        if (count($positions) !== count(array_unique($positions))) {
-            throw new moodle_exception('errorduplicatedposition', 'sortvoting');
-        }
-
-        // Check if the user has already voted and update the vote.
-        $existingvotes = $DB->get_records_menu(
-            'sortvoting_answers',
-            [
-                'sortvotingid' => $params['sortvotingid'],
-                'userid' => $USER->id
-            ],
-            'id ASC', 'optionid, position'
-        );
-        if (!empty($existingvotes)) {
-            $DB->delete_records('sortvoting_answers', ['sortvotingid' => $params['sortvotingid'], 'userid' => $USER->id]);
-        }
-
-        // Save votes in sortvoting_answers table.
-        $DB->insert_records('sortvoting_answers', $answers);
-
-        // Update completion state.
-        sortvoting_update_completion($sortvoting, $course, $cm);
-
-        return true;
+        return ['success' => true, 'allowupdate' => (bool) $sortvoting->allowupdate];
     }
 
     /**
      * Describes the return function of save_vote.
      *
-     * @return external_value
+     * @return external_single_structure
      */
     public static function execute_returns() {
-        return new external_value(PARAM_BOOL, 'Returns true on successful vote submision or throws an error');
+        return new external_single_structure(
+            [
+                'success' => new external_value(PARAM_BOOL, 'Returns true on successful vote submision or throws an error'),
+                'allowupdate' => new external_value(PARAM_BOOL, 'Returns true if vote can be updated', VALUE_REQUIRED)
+            ]
+        );
     }
 }
