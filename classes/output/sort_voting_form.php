@@ -64,7 +64,7 @@ class sort_voting_form implements \templatable, \renderable {
             $allowupdate = false;
         }
 
-        $defaultposition = (count($existingvotes) > 0) ? count($existingvotes) : 1;
+        $defaultposition = (count($existingvotes) > 0) ? (count($existingvotes)+1) : 1;
         $optionsclean = [];
         foreach ($options as $option) {
             $position = isset($existingvotes[$option->id]) ? $existingvotes[$option->id] : $defaultposition++;

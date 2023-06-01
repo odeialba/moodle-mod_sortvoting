@@ -36,24 +36,14 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-$params = [
-    'objectid' => $sortvoting->id,
-    'context' => $modulecontext
-];
-$event = \mod_sortvoting\event\course_module_viewed::create($params);
-$event->add_record_snapshot('course_modules', $cm);
-$event->add_record_snapshot('course', $course);
-$event->add_record_snapshot('sortvoting', $sortvoting);
-$event->trigger();
-
-// Completion update.
-$completion = new completion_info($course);
-$completion->set_module_viewed($cm);
+// Completion and trigger events.
+sortvoting_view($sortvoting, $course, $cm, $modulecontext);
 
 $PAGE->set_url('/mod/sortvoting/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($sortvoting->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
+$PAGE->add_body_class('limitedwidth');
 $PAGE->activityheader->set_attrs([]);
 
 // TODO: Check if we want to include responses from inactive users.

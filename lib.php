@@ -29,7 +29,6 @@ define('SORTVOTING_EVENT_TYPE_OPEN', 'open');
 define('SORTVOTING_EVENT_TYPE_CLOSE', 'close');
 
 use mod_sortvoting\completion\custom_completion;
-use stdClass;
 
 /**
  * Return if the plugin supports $feature.
@@ -77,7 +76,7 @@ function sortvoting_add_instance($sortvoting, $mform = null) {
     foreach ($sortvoting->option as $key => $value) {
         $value = trim($value);
         if (isset($value) && $value <> '') {
-            $option = new stdClass();
+            $option = new \stdClass();
             $option->text = $value;
             $option->sortvotingid = $sortvoting->id;
             $option->timemodified = time();
@@ -113,7 +112,7 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
 
     foreach ($sortvoting->option as $key => $value) {
         $value = trim($value);
-        $option = new stdClass();
+        $option = new \stdClass();
         $option->text = $value;
         $option->sortvotingid = $sortvoting->id;
         $option->timemodified = time();
@@ -183,10 +182,10 @@ function sortvoting_delete_instance($id) {
  * Process user submitted answers for sortvoting,
  * and either updating them or saving new answers.
  *
- * @param stdClass $sortvoting the selected sortvoting.
+ * @param \stdClass $sortvoting the selected sortvoting.
  * @param array $votes submitted votes.
- * @param stdClass $course current course.
- * @param cm_info|stdClass $cm course context.
+ * @param \stdClass $course current course.
+ * @param cm_info|\stdClass $cm course context.
  * @return void
  */
 function sortvoting_user_submit_response($sortvoting, array $votes, $course, $cm) {
@@ -233,9 +232,9 @@ function sortvoting_user_submit_response($sortvoting, array $votes, $course, $cm
 /**
  * Update completion state for sortvoting.
  *
- * @param stdClass $sortvoting
- * @param stdClass $course
- * @param cm_info|stdClass $cm
+ * @param \stdClass $sortvoting
+ * @param \stdClass $course
+ * @param cm_info|\stdClass $cm
  * @return void
  */
 function sortvoting_update_completion($sortvoting, $course, $cm) {
@@ -252,7 +251,7 @@ function sortvoting_update_completion($sortvoting, $course, $cm) {
  * Given a course_module object, this function returns any "extra" information that may be needed
  * when printing this activity in a course listing.  See get_array_of_activities() in course/lib.php.
  *
- * @param stdClass $coursemodule The coursemodule object (record).
+ * @param \stdClass $coursemodule The coursemodule object (record).
  * @return cached_cm_info|false An object on information that the courses
  *                        will know about (most noticeably, an icon).
  */
@@ -293,7 +292,7 @@ function sortvoting_get_coursemodule_info($coursemodule) {
 /**
  * Callback which returns human-readable strings describing the active completion custom rules for the module instance.
  *
- * @param cm_info|stdClass $cm object with fields ->completion and ->customdata['customcompletionrules']
+ * @param cm_info|\stdClass $cm object with fields ->completion and ->customdata['customcompletionrules']
  * @return array $descriptions the array of descriptions for the custom rules.
  */
 function mod_sortvoting_get_completion_active_rule_descriptions($cm) {
@@ -340,7 +339,7 @@ function sortvoting_get_sortvoting($sortvotingid) {
 /**
  * This creates new calendar events given as timeopen and timeclose by $sortvoting.
  *
- * @param stdClass $sortvoting
+ * @param \stdClass $sortvoting
  * @return void
  */
 function sortvoting_set_events($sortvoting) {
@@ -355,7 +354,7 @@ function sortvoting_set_events($sortvoting) {
     }
 
     // SortVoting start calendar events.
-    $event = new stdClass();
+    $event = new \stdClass();
     $event->eventtype = SORTVOTING_EVENT_TYPE_OPEN;
     // The SORTVOTING_EVENT_TYPE_OPEN event should only be an action event if no close time is specified.
     $event->type = empty($sortvoting->timeclose) ? CALENDAR_EVENT_TYPE_ACTION : CALENDAR_EVENT_TYPE_STANDARD;
@@ -397,7 +396,7 @@ function sortvoting_set_events($sortvoting) {
     }
 
     // SortVoting end calendar events.
-    $event = new stdClass();
+    $event = new \stdClass();
     $event->type = CALENDAR_EVENT_TYPE_ACTION;
     $event->eventtype = SORTVOTING_EVENT_TYPE_CLOSE;
     if ($event->id = $DB->get_field('event', 'id',
@@ -436,4 +435,29 @@ function sortvoting_set_events($sortvoting) {
             calendar_event::create($event, false);
         }
     }
+}
+
+/**
+ * Mark the activity completed (if required) and trigger the course_module_viewed event.
+ *
+ * @param  stdClass $sortvoting sortvoting object
+ * @param  stdClass $course     course object
+ * @param  stdClass $cm         course module object
+ * @param  stdClass $context    context object
+ */
+function sortvoting_view($sortvoting, $course, $cm, $context) {
+    // Trigger course_module_viewed event.
+    $params = [
+        'objectid' => $sortvoting->id,
+        'context' => $context
+    ];
+    $event = \mod_sortvoting\event\course_module_viewed::create($params);
+    $event->add_record_snapshot('course_modules', $cm);
+    $event->add_record_snapshot('course', $course);
+    $event->add_record_snapshot('sortvoting', $sortvoting);
+    $event->trigger();
+
+    // Completion update.
+    $completion = new completion_info($course);
+    $completion->set_module_viewed($cm);
 }
