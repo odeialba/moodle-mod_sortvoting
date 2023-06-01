@@ -1,4 +1,5 @@
 <?php
+use stdClass;
 // This file is part of the mod_sortvoting plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -21,6 +22,9 @@
  * @copyright   2023 Odei Alba <odeialba@odeialba.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+define('SORTVOTING_EVENT_TYPE_OPEN', 'open');
+define('SORTVOTING_EVENT_TYPE_CLOSE', 'close');
 
 /**
  * Return if the plugin supports $feature.
@@ -65,7 +69,11 @@ function sortvoting_add_instance($sortvoting, $mform = null) {
     }
 
     // Add calendar events if necessary.
-    // TODO: Check choice activity for this.
+    sortvoting_set_events($sortvoting);
+    if (!empty($sortvoting->completionexpected)) {
+        \core_completion\api::update_completion_date_event($sortvoting->coursemodule, 'sortvoting', $sortvoting->id,
+            $sortvoting->completionexpected);
+    }
 
     return $sortvoting->id;
 }
@@ -86,7 +94,6 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
     $sortvoting->timemodified = time();
     $sortvoting->id = $sortvoting->instance;
 
-    // TODO: Check this. Maybe it can be done with a simple array instead of that thing from data processing.
     foreach ($sortvoting->option as $key => $value) {
         $value = trim($value);
         $option = new stdClass();
@@ -111,7 +118,10 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
     }
 
     // Add calendar events if necessary.
-    // TODO: Check choice activity for this.
+    sortvoting_set_events($sortvoting);
+    $completionexpected = (!empty($sortvoting->completionexpected)) ? $sortvoting->completionexpected : null;
+    \core_completion\api::update_completion_date_event($sortvoting->coursemodule, 'sortvoting', $sortvoting->id,
+        $completionexpected);
 
     return $DB->update_record('sortvoting', $sortvoting);
 
@@ -144,5 +154,225 @@ function sortvoting_delete_instance($id) {
         $result = false;
     }
 
+    // Remove old calendar events.
+    if (! $DB->delete_records('event', array('modulename' => 'sortvoting', 'instance' => $id))) {
+        $result = false;
+    }
+
     return $result;
+}
+
+/**
+ * Process user submitted answers for sortvoting,
+ * and either updating them or saving new answers.
+ *
+ * @param stdClass $sortvoting the selected sortvoting.
+ * @param array $votes submitted votes.
+ * @param stdClass $course current course.
+ * @param stdClass $cm course context.
+ * @return void
+ */
+function sortvoting_user_submit_response(stdClass $sortvoting, array $votes, stdClass $course, stdClass $cm) {
+    global $DB, $USER;
+
+    // Build answers and positions arrays for later processing.
+    $positions = [];
+    $answers = [];
+    foreach ($votes as $vote) {
+        $positions[] = $vote['position'];
+        $answers[] = [
+            'userid' => $USER->id,
+            'sortvotingid' => $sortvoting->id,
+            'position' => $vote['position'],
+            'optionid' => $vote['optionid']
+        ];
+    }
+
+    // Check if all elements of the positions array are unique.
+    if (count($positions) !== count(array_unique($positions))) {
+        throw new moodle_exception('errorduplicatedposition', 'sortvoting');
+    }
+
+    // Check if the user has already voted and update the vote.
+    $existingvotes = $DB->get_records_menu(
+        'sortvoting_answers',
+        [
+            'sortvotingid' => $sortvoting->id,
+            'userid' => $USER->id
+        ],
+        'id ASC', 'optionid, position'
+    );
+    if (!empty($existingvotes)) {
+        $DB->delete_records('sortvoting_answers', ['sortvotingid' => $sortvoting->id, 'userid' => $USER->id]);
+    }
+
+    // Save votes in sortvoting_answers table.
+    $DB->insert_records('sortvoting_answers', $answers);
+
+    // Update completion state
+    sortvoting_update_completion($sortvoting, $course, $cm);
+}
+
+/**
+ * Update completion state for sortvoting.
+ *
+ * @param stdClass $sortvoting
+ * @param stdClass $course
+ * @param stdClass $cm
+ * @return void
+ */
+function sortvoting_update_completion(stdClass $sortvoting, stdClass $course, stdClass $cm) {
+    $completion = new \completion_info($course);
+    if ($completion->is_enabled($cm) && $sortvoting->completionsubmit) {
+        $completion->update_state($cm, COMPLETION_COMPLETE);
+    }
+}
+
+/**
+ * Callback which returns human-readable strings describing the active completion custom rules for the module instance.
+ *
+ * @param cm_info|stdClass $cm object with fields ->completion and ->customdata['customcompletionrules']
+ * @return array $descriptions the array of descriptions for the custom rules.
+ */
+function mod_sortvoting_get_completion_active_rule_descriptions($cm) {
+    // Values will be present in cm_info, and we assume these are up to date.
+    if (empty($cm->customdata['customcompletionrules'])
+        || $cm->completion != COMPLETION_TRACKING_AUTOMATIC) {
+        return [];
+    }
+    $descriptions = [];
+    foreach ($cm->customdata['customcompletionrules'] as $key => $val) {
+        switch ($key) {
+            case 'completionsubmit':
+                if (!empty($val)) {
+                    $descriptions[] = get_string('completionsubmit', 'sortvoting');
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    return $descriptions;
+}
+
+/**
+ * Gets a full sortvoting record
+ *
+ * @global object
+ * @param int $sortvotingid
+ * @return object|bool The sortvoting or false
+ */
+function sortvoting_get_sortvoting($sortvotingid) {
+    global $DB;
+
+    if ($sortvoting = $DB->get_record("sortvoting", array("id" => $sortvotingid))) {
+        if ($options = $DB->get_records("sortvoting_options", array("sortvotingid" => $sortvotingid), "id")) {
+            foreach ($options as $option) {
+                $sortvoting->option[$option->id] = $option->text;
+            }
+            return $sortvoting;
+        }
+    }
+    return false;
+}
+
+/**
+ * This creates new calendar events given as timeopen and timeclose by $sortvoting.
+ *
+ * @param stdClass $sortvoting
+ * @return void
+ */
+function sortvoting_set_events($sortvoting) {
+    global $DB, $CFG;
+
+    require_once($CFG->dirroot.'/calendar/lib.php');
+
+    // Get CMID if not sent as part of $sortvoting.
+    if (!isset($sortvoting->coursemodule)) {
+        $cm = get_coursemodule_from_instance('sortvoting', $sortvoting->id, $sortvoting->course);
+        $sortvoting->coursemodule = $cm->id;
+    }
+
+    // sortvoting start calendar events.
+    $event = new stdClass();
+    $event->eventtype = SORTVOTING_EVENT_TYPE_OPEN;
+    // The SORTVOTING_EVENT_TYPE_OPEN event should only be an action event if no close time is specified.
+    $event->type = empty($sortvoting->timeclose) ? CALENDAR_EVENT_TYPE_ACTION : CALENDAR_EVENT_TYPE_STANDARD;
+    if ($event->id = $DB->get_field('event', 'id',
+            array('modulename' => 'sortvoting', 'instance' => $sortvoting->id, 'eventtype' => $event->eventtype))) {
+        if ((!empty($sortvoting->timeopen)) && ($sortvoting->timeopen > 0)) {
+            // Calendar event exists so update it.
+            $event->name = get_string('calendarstart', 'sortvoting', $sortvoting->name);
+            $event->description = format_module_intro('sortvoting', $sortvoting, $sortvoting->coursemodule, false);
+            $event->format = FORMAT_HTML;
+            $event->timestart = $sortvoting->timeopen;
+            $event->timesort = $sortvoting->timeopen;
+            $event->visible = instance_is_visible('sortvoting', $sortvoting);
+            $event->timeduration = 0;
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->update($event, false);
+        } else {
+            // Calendar event is on longer needed.
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->delete();
+        }
+    } else {
+        // Event doesn't exist so create one.
+        if ((!empty($sortvoting->timeopen)) && ($sortvoting->timeopen > 0)) {
+            $event->name = get_string('calendarstart', 'sortvoting', $sortvoting->name);
+            $event->description = format_module_intro('sortvoting', $sortvoting, $sortvoting->coursemodule, false);
+            $event->format = FORMAT_HTML;
+            $event->courseid = $sortvoting->course;
+            $event->groupid = 0;
+            $event->userid = 0;
+            $event->modulename = 'sortvoting';
+            $event->instance = $sortvoting->id;
+            $event->timestart = $sortvoting->timeopen;
+            $event->timesort = $sortvoting->timeopen;
+            $event->visible = instance_is_visible('sortvoting', $sortvoting);
+            $event->timeduration = 0;
+            calendar_event::create($event, false);
+        }
+    }
+
+    // sortvoting end calendar events.
+    $event = new stdClass();
+    $event->type = CALENDAR_EVENT_TYPE_ACTION;
+    $event->eventtype = SORTVOTING_EVENT_TYPE_CLOSE;
+    if ($event->id = $DB->get_field('event', 'id',
+            array('modulename' => 'sortvoting', 'instance' => $sortvoting->id, 'eventtype' => $event->eventtype))) {
+        if ((!empty($sortvoting->timeclose)) && ($sortvoting->timeclose > 0)) {
+            // Calendar event exists so update it.
+            $event->name = get_string('calendarend', 'sortvoting', $sortvoting->name);
+            $event->description = format_module_intro('sortvoting', $sortvoting, $sortvoting->coursemodule, false);
+            $event->format = FORMAT_HTML;
+            $event->timestart = $sortvoting->timeclose;
+            $event->timesort = $sortvoting->timeclose;
+            $event->visible = instance_is_visible('sortvoting', $sortvoting);
+            $event->timeduration = 0;
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->update($event, false);
+        } else {
+            // Calendar event is on longer needed.
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->delete();
+        }
+    } else {
+        // Event doesn't exist so create one.
+        if ((!empty($sortvoting->timeclose)) && ($sortvoting->timeclose > 0)) {
+            $event->name = get_string('calendarend', 'sortvoting', $sortvoting->name);
+            $event->description = format_module_intro('sortvoting', $sortvoting, $sortvoting->coursemodule, false);
+            $event->format = FORMAT_HTML;
+            $event->courseid = $sortvoting->course;
+            $event->groupid = 0;
+            $event->userid = 0;
+            $event->modulename = 'sortvoting';
+            $event->instance = $sortvoting->id;
+            $event->timestart = $sortvoting->timeclose;
+            $event->timesort = $sortvoting->timeclose;
+            $event->visible = instance_is_visible('sortvoting', $sortvoting);
+            $event->timeduration = 0;
+            calendar_event::create($event, false);
+        }
+    }
 }

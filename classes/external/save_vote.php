@@ -24,6 +24,9 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use moodle_exception;
 
+defined('MOODLE_INTERNAL') || die;
+require_once($CFG->dirroot . '/mod/sortvoting/lib.php');
+
 /**
  * External function save_vote for mod_sortvoting.
  *
@@ -68,10 +71,17 @@ class save_vote extends external_api {
             'votes' => $votes
         ]);
 
-        $cm = get_coursemodule_from_instance('sortvoting', $params['sortvotingid']);
+        if (!$sortvoting = sortvoting_get_sortvoting($params['sortvotingid'])) {
+            throw new moodle_exception("invalidcoursemodule", "error");
+        }
+        list($course, $cm) = get_course_and_cm_from_instance($sortvoting, 'sortvoting');
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
         \mod_sortvoting\permission::require_can_vote($context);
+
+        sortvoting_user_submit_response($sortvoting, $params['votes'], $course, $cm);
+
+        return true;
 
         // Build answers and positions arrays for later processing.
         $positions = [];
@@ -106,6 +116,9 @@ class save_vote extends external_api {
 
         // Save votes in sortvoting_answers table.
         $DB->insert_records('sortvoting_answers', $answers);
+
+        // Update completion state
+        sortvoting_update_completion($sortvoting, $course, $cm);
 
         return true;
     }

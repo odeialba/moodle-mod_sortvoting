@@ -31,6 +31,10 @@ $string['allowupdate_help'] = 'If enabled, users will be able to update their vo
 If new options are added, users will be able to update the votes even when they have already submitted them. (Even when this option is disabled)';
 $string['atleasttwooptions'] = 'You need to provide at least two options.';
 $string['averageposition'] = 'Average position';
+$string['calendarend'] = '{$a} closes';
+$string['calendarstart'] = '{$a} opens';
+$string['completiondetail:submit'] = 'Submit vote';
+$string['completionsubmit'] = 'Show as complete when user submits the vote';
 $string['errorduplicatedposition'] = 'All positions must be unique.';
 $string['modulename'] = 'Sort Voting';
 $string['modulenameplural'] = 'Sort Votings';
