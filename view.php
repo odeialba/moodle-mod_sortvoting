@@ -54,6 +54,7 @@ $PAGE->set_url('/mod/sortvoting/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($sortvoting->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
+$PAGE->activityheader->set_attrs([]);
 
 // TODO: Check if we want to include responses from inactive users.
 
