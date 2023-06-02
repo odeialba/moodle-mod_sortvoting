@@ -24,27 +24,27 @@
         "votes": [
             {
                 "id": "1",
-                "avg": "1",
+                "position": "1",
                 "text": "A"
             },
             {
                 "id": "2",
-                "avg": "2",
+                "position": "2",
                 "text": "B"
             },
             {
                 "id": "3",
-                "avg": "3",
+                "position": "2",
                 "text": "C"
             },
             {
                 "id": "4",
-                "avg": "4",
+                "position": "3",
                 "text": "D"
             },
             {
                 "id": "5",
-                "avg": "5",
+                "position": "4",
                 "text": "E"
             }
         ]
@@ -53,14 +53,14 @@
 <table border="1" class="m-3 table">
     <thead>
         <tr>
-            <th>{{#str}} averageposition, mod_sortvoting {{/str}}</th>
-            <th>{{#str}} option, mod_sortvoting {{/str}}</th>
+            <th class="w-25">{{#str}} position, mod_sortvoting {{/str}}</th>
+            <th class="w-75">{{#str}} option, mod_sortvoting {{/str}}</th>
         </tr>
     </thead>
     <tbody>
         {{#votes}}
             <tr>
-                <td>{{avg}}</td>
+                <td>{{position}}</td>
                 <td>{{text}}</td>
             </tr>
         {{/votes}}

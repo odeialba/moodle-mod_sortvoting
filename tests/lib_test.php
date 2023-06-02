@@ -34,7 +34,9 @@ require_once($CFG->dirroot . '/mod/sortvoting/lib.php');
 class lib_test extends \externallib_advanced_testcase {
 
     /**
-     * Test sortvoting_view
+     * Tests events after sortvoting is viewed.
+     *
+     * @covers ::sortvoting_view
      * @return void
      */
     public function test_sortvoting_view() {
@@ -71,6 +73,9 @@ class lib_test extends \externallib_advanced_testcase {
      * Test the callback responsible for returning the completion rule descriptions.
      * This function should work given either an instance of the module (cm_info), such as when checking the active rules,
      * or if passed a stdClass of similar structure, such as when checking the the default completion settings for a mod type.
+     *
+     * @covers ::mod_sortvoting_get_completion_active_rule_descriptions
+     * @return void
      */
     public function test_mod_sortvoting_completion_get_active_rule_descriptions() {
         $this->resetAfterTest();

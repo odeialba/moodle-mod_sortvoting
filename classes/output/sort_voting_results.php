@@ -59,6 +59,16 @@ class sort_voting_results implements \templatable, \renderable {
                 ORDER BY avg ASC";
         $existingvotes = $DB->get_records_sql($sql, ['sortvotingid' => $this->sortvoting->id]);
 
+        $position = 1;
+        $previousvote = null;
+        foreach ($existingvotes as $key => $vote) {
+            if ($previousvote !== null && $previousvote->avg !== $vote->avg) {
+                $position++;
+            }
+            $existingvotes[$key]->position = $position;
+            $previousvote = $vote;
+        }
+
         return ['votes' => array_values($existingvotes)];
     }
 }

@@ -30,7 +30,6 @@ $string['allowupdate_help'] = 'If enabled, users will be able to update their vo
 
 If new options are added, users will be able to update the votes even when they have already submitted them. (Even when this option is disabled)';
 $string['atleasttwooptions'] = 'You need to provide at least two options.';
-$string['averageposition'] = 'Average position';
 $string['calendarend'] = '{$a} closes';
 $string['calendarstart'] = '{$a} opens';
 $string['completiondetail:submit'] = 'Submit vote';
@@ -42,6 +41,7 @@ $string['notenrolledsort'] = 'Sorry, only enrolled users are allowed to sort.';
 $string['option'] = 'Option';
 $string['optionno'] = 'Option {no}';
 $string['options'] = 'Options';
+$string['position'] = 'Position';
 $string['pluginadministration'] = 'Sort Voting administration';
 $string['pluginname'] = 'Sort Voting';
 $string['sortoptions'] = 'Sort options';

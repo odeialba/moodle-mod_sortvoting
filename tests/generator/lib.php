@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * mod_sortvoting data generator class.
  *
@@ -26,6 +24,13 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mod_sortvoting_generator extends testing_module_generator {
 
+    /**
+     * Create an instance for testing mod_sortvoting.
+     *
+     * @param mixed $record
+     * @param array|null $options
+     * @return stdClass
+     */
     public function create_instance($record = null, array $options = null) {
         $record = (object)(array)$record;
 
