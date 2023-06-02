@@ -96,6 +96,13 @@ Alternatively, you can run
 
 to complete the installation from the command line.
 
+## TODO - Roadmap ##
+
+- [ ] Add a different tab for the results
+- [ ] Detailed view of the results
+- [ ] More tests (PHPUnit and Behat)
+- [ ] Colors! Colors are always nice!
+
 ## License ##
 
 2023 Odei Alba <odeialba@odeialba.com>
