@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_sortvoting';
 $plugin->release = '1.0.0';
-$plugin->version = 2023052504;
+$plugin->version = 2023060200;
 $plugin->requires = 2022112800;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [];
