@@ -99,6 +99,7 @@ to complete the installation from the command line.
 ## TODO - Roadmap ##
 
 - [ ] Add a different tab for the results
+- [ ] Allow students to see results using a plugin setting
 - [ ] Detailed view of the results
 - [ ] More tests (PHPUnit and Behat)
 - [ ] Colors! Colors are always nice!
