@@ -463,3 +463,29 @@ function sortvoting_view($sortvoting, $course, $cm, $context) {
     $completion = new completion_info($course);
     $completion->set_module_viewed($cm);
 }
+
+/**
+ * This function extends the settings navigation block for the site.
+ *
+ * @param settings_navigation $settings
+ * @param navigation_node $node
+ * @return void
+ */
+function sortvoting_extend_settings_navigation($settings, $node) {
+    if (has_capability('mod/sortvoting:readresponses', $settings->get_page()->cm->context)) {
+        // We want to add these new nodes after the Settings node.
+        $keys = $node->get_children_key_list();
+        $beforekey = null;
+        $i = array_search('modedit', $keys);
+        if ($i === false && array_key_exists(0, $keys)) {
+            $beforekey = $keys[0];
+        } else if (array_key_exists($i + 1, $keys)) {
+            $beforekey = $keys[$i + 1];
+        }
+
+        $url = new moodle_url('/mod/sortvoting/report.php', ['id' => $settings->get_page()->cm->id]);
+        $messagesnode = navigation_node::create(get_string('responses', 'mod_sortvoting'),
+                $url, navigation_node::TYPE_SETTING);
+        $node->add_node($messagesnode, $beforekey);
+    }
+}

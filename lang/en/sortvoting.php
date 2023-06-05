@@ -35,6 +35,7 @@ $string['calendarstart'] = '{$a} opens';
 $string['completiondetail:submit'] = 'Submit vote';
 $string['completionsubmit'] = 'Student must submit a vote to complete this activity';
 $string['errorduplicatedposition'] = 'All positions must be unique.';
+$string['errornopermissionviewreports'] = 'No permission to view reports';
 $string['modulename'] = 'Sort Voting';
 $string['modulenameplural'] = 'Sort Votings';
 $string['notenrolledsort'] = 'Sorry, only enrolled users are allowed to sort.';
@@ -44,6 +45,7 @@ $string['options'] = 'Options';
 $string['position'] = 'Position';
 $string['pluginadministration'] = 'Sort Voting administration';
 $string['pluginname'] = 'Sort Voting';
+$string['responses'] = 'Responses';
 $string['sortoptions'] = 'Sort options';
 $string['sortoptions_help'] = 'Here is where you specify the options that participants have to sort.
 

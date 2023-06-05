@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Prints an instance of mod_sortvoting.
+ * Prints the reports of an instance of mod_sortvoting.
  *
  * @package     mod_sortvoting
  * @copyright   2023 Odei Alba <odeialba@odeialba.com>
@@ -36,10 +36,7 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-// Completion and trigger events.
-sortvoting_view($sortvoting, $course, $cm, $modulecontext);
-
-$PAGE->set_url('/mod/sortvoting/view.php', ['id' => $cm->id]);
+$PAGE->set_url('/mod/sortvoting/report.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($sortvoting->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
@@ -50,10 +47,12 @@ $PAGE->activityheader->set_attrs([]);
 
 $output = $PAGE->get_renderer('mod_sortvoting');
 echo $output->header();
-if (is_enrolled($modulecontext, null, 'mod/sortvoting:vote')) {
-    $votingform = new \mod_sortvoting\output\sort_voting_form($sortvoting);
-    echo $output->render($votingform);
+// Teacher can see results.
+if (has_capability('mod/sortvoting:readresponses', $modulecontext)) {
+    $votingresults = new \mod_sortvoting\output\sort_voting_results($sortvoting);
+    echo $output->render($votingresults);
+    // TODO: Add an option to download reports.
 } else {
-    echo $OUTPUT->notification(get_string('notenrolledsort', 'sortvoting'), 'notifyproblem');
+    echo $OUTPUT->notification(get_string('errornopermissionviewreports', 'sortvoting'), 'notifyproblem');
 }
 echo $output->footer($course);
