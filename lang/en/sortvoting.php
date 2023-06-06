@@ -56,6 +56,8 @@ $string['sortoptions'] = 'Sort options';
 $string['sortoptions_help'] = 'Here is where you specify the options that participants have to sort.
 
 You can fill in any number of these. If you leave some of the options blank, they will not be displayed. If you need more than 8 options, click the "Add 3 fields to form" button.';
+$string['sortvoting'] = 'Choice';
+$string['sortvoting:addinstance'] = 'Add a new Sort Voting';
 $string['sortvotingname'] = 'Voting name';
 $string['sortvotingname_help'] = 'This will be the name used to identify this element in the course view.';
 $string['sortvotingsettings'] = 'Voting name';
