@@ -34,45 +34,59 @@ jobs:
           - php: '7.4'
             moodle-branch: 'MOODLE_400_STABLE'
             database: pgsql
+            extensions: xmlrpc-beta
           - php: '7.4'
             moodle-branch: 'MOODLE_400_STABLE'
             database: mariadb
+            extensions: xmlrpc-beta
           - php: '7.4'
             moodle-branch: 'MOODLE_401_STABLE'
             database: pgsql
+            extensions: xmlrpc-beta
           - php: '7.4'
             moodle-branch: 'MOODLE_401_STABLE'
             database: mariadb
+            extensions: xmlrpc-beta
           - php: '8.0'
             moodle-branch: 'MOODLE_400_STABLE'
             database: pgsql
+            extensions: xmlrpc-beta
           - php: '8.0'
             moodle-branch: 'MOODLE_400_STABLE'
             database: mariadb
+            extensions: xmlrpc-beta
           - php: '8.0'
             moodle-branch: 'MOODLE_401_STABLE'
             database: pgsql
+            extensions: xmlrpc-beta
           - php: '8.0'
             moodle-branch: 'MOODLE_401_STABLE'
             database: mariadb
+            extensions: xmlrpc-beta
           - php: '8.0'
             moodle-branch: 'MOODLE_402_STABLE'
             database: pgsql
+            extensions: xmlrpc-beta
           - php: '8.0'
             moodle-branch: 'MOODLE_402_STABLE'
             database: mariadb
+            extensions: xmlrpc-beta
           - php: '8.1'
             moodle-branch: 'MOODLE_401_STABLE'
             database: pgsql
+            extensions: xmlrpc-beta
           - php: '8.1'
             moodle-branch: 'MOODLE_401_STABLE'
             database: mariadb
+            extensions: xmlrpc-beta
           - php: '8.1'
             moodle-branch: 'MOODLE_402_STABLE'
             database: pgsql
+            extensions: xmlrpc-beta
           - php: '8.1'
             moodle-branch: 'MOODLE_402_STABLE'
             database: mariadb
+            extensions: xmlrpc-beta
 
     steps:
       - name: Check out repository code
