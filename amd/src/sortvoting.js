@@ -54,7 +54,7 @@ const saveVote = function(saveSortVoteElement) {
 
     // Check if all elements of the positions array are unique.
     if (new Set(positions).size !== positions.length) {
-        window.alert(getString('errorduplicatedposition', 'mod_sortvoting'));
+        toastAdd(getString('errorduplicatedposition', 'mod_sortvoting'), {type: 'danger'});
         saveSortVoteElement.removeAttribute('disabled');
         return;
     }
