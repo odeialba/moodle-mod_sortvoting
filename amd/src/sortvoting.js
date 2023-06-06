@@ -44,7 +44,7 @@ const saveVote = function(saveSortVoteElement) {
     // Build votes and positions arrays for later processing.
     var votes = [];
     var positions = [];
-    options.forEach(function (option) {
+    options.forEach(function(option) {
         positions.push(option.value);
         votes.push({
             'position': option.value,
@@ -54,7 +54,7 @@ const saveVote = function(saveSortVoteElement) {
 
     // Check if all elements of the positions array are unique.
     if (new Set(positions).size !== positions.length) {
-        window.alert(getString('errorduplicatedposition', 'mod_sortvoting'));
+        toastAdd(getString('errorduplicatedposition', 'mod_sortvoting'), {type: 'danger'});
         saveSortVoteElement.removeAttribute('disabled');
         return;
     }
@@ -67,13 +67,13 @@ const saveVote = function(saveSortVoteElement) {
         if (result.success) {
             toastAdd(getString('votesuccess', 'mod_sortvoting'), {type: 'success'});
         } else {
-            toastAdd(getString('voteerror', 'mod_sortvoting'), { type: 'danger' });
+            toastAdd(getString('voteerror', 'mod_sortvoting'), {type: 'danger'});
         }
         if (result.allowupdate) {
             saveSortVoteElement.removeAttribute('disabled');
         } else {
             saveSortVoteElement.style.display = 'none';
-            jQuery('ul#sortvotinglist > li.optionitem').each(function (index, element) {
+            jQuery('ul#sortvotinglist > li.optionitem').each(function(index, element) {
                 element.classList.remove('optionitem', 'draggable');
                 element.classList.add('bg-gray-100');
                 element.removeAttribute('draggable');
@@ -91,7 +91,7 @@ const setupSortableLists = () => {
         moveHandlerSelector: '.optionitem',
     });
     // Listen to the events when element is dragged.
-    jQuery('ul#sortvotinglist > *').on(SortableList.EVENTS.DROP, function (evt, info) {
+    jQuery('ul#sortvotinglist > *').on(SortableList.EVENTS.DROP, function(evt, info) {
         if (info.positionChanged) {
             // Get the ul element and loop into the li elements.
             var list = info.sourceList[0];
