@@ -24,8 +24,6 @@ use core_privacy\local\request\helper;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Implementation of the privacy subsystem plugin provider for the sortvoting activity module.
  *
@@ -152,9 +150,9 @@ class provider implements
 
         $params = ['modname' => 'sortvoting', 'contextlevel' => CONTEXT_MODULE, 'userid' => $user->id] + $contextparams;
 
-        // Reference to the sortvoting activity seen in the last iteration of the loop. By comparing this with the current record, and
-        // because we know the results are ordered, we know when we've moved to the answers for a new sortvoting activity and therefore
-        // when we can export the complete data for the last activity.
+        // Reference to the sortvoting activity seen in the last iteration of the loop. By comparing this with the current record,
+        // and because we know the results are ordered, we know when we've moved to the answers for a new sortvoting activity and
+        // therefore when we can export the complete data for the last activity.
         $lastcmid = null;
 
         $sortvotinganswers = $DB->get_recordset_sql($sql, $params);
