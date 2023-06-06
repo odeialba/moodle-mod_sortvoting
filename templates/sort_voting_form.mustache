@@ -68,10 +68,10 @@
 {{/options}}
 </ul>
 {{#allowupdate}}
-    <button class="btn btn-primary" data-action="savevote" title="{{#str}} save {{/str}}">{{#str}} save {{/str}}</button>
-    {{#js}}
-        require(['mod_sortvoting/sortvoting'], function(sortvoting) {
-            sortvoting.init();
-        });
-    {{/js}}
+<button class="btn btn-primary" data-action="savevote" title="{{#str}} save {{/str}}">{{#str}} save {{/str}}</button>
+{{#js}}
+    require(['mod_sortvoting/sortvoting'], function(sortvoting) {
+        sortvoting.init();
+    });
+{{/js}}
 {{/allowupdate}}
