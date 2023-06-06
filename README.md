@@ -1,17 +1,17 @@
-# SortVoting #
+# SortVoting [![Build Status](https://github.com/odeialba/moodle-mod_sortvoting/workflows/Moodle%20Plugin%20CI/badge.svg)](https://github.com/odeialba/moodle-mod_sortvoting/actions)
 
 This plugin allows sorting a list of options by preference of the user, instead of just selecting one.
 
 The problem with the ordinary voting (selecting A or B) is that if many people hate the winning option but the majority votes for it, it will win. This plugin will allow users to set in order the preference of multiple options.
 
-## Examples: ##
+## Examples:
 **Setup:**
 - Available options A, B, C, D
 - People voting 5
 
-### Traditional voting: ###
+### Traditional voting:
 
-#### Votes: ####
+#### Votes:
 
 - User1 = A
 - User2 = A
@@ -19,20 +19,20 @@ The problem with the ordinary voting (selecting A or B) is that if many people h
 - User4 = C
 - User5 = D
 
-#### Results in traditional voting: ####
+#### Results in traditional voting:
 
 - A = 2
 - B = 1
 - C = 1
 - D = 1
 
-#### Explanation: ####
+#### Explanation:
 
 A gets 2 votes from user1 and user2 and all the other options get one vote each. Users 3, 4 and 5 might prefer to have the option B before having the option A, but since the majority voted for A, A will be the winner.
 
-### Voting with the plugin: ###
+### Voting with the plugin:
 
-#### Votes: ####
+#### Votes:
 
 - User1:
     - A
@@ -60,20 +60,20 @@ A gets 2 votes from user1 and user2 and all the other options get one vote each.
     - C
     - A
 
-#### Results voting with the plugin: ####
+#### Results voting with the plugin:
 
 - B
 - D
 - C
 - A
 
-#### Explanation: ####
+#### Explanation:
 
 If we calculate the average position of the options in the votes the winner would be B.
 
 
 
-## Installing via uploaded ZIP file ##
+## Installing via uploaded ZIP file
 
 1. Log in to your Moodle site as an admin and go to _Site administration >
    Plugins > Install plugins_.
@@ -81,7 +81,7 @@ If we calculate the average position of the options in the votes the winner woul
    extra details if your plugin type is not automatically detected.
 3. Check the plugin validation report and finish the installation.
 
-## Installing manually ##
+## Installing manually
 
 The plugin can be also installed by putting the contents of this directory to
 
@@ -96,14 +96,14 @@ Alternatively, you can run
 
 to complete the installation from the command line.
 
-## TODO - Roadmap ##
+## TODO - Roadmap
 
 - [ ] Allow students to see results using a plugin setting
 - [ ] Detailed view of the results
 - [ ] More tests (PHPUnit and Behat)
 - [ ] Colors! Colors are always nice!
 
-## License ##
+## License
 
 2023 Odei Alba <odeialba@odeialba.com>
 
