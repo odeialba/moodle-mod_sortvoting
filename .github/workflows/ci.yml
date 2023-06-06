@@ -78,7 +78,6 @@ jobs:
           - php: '8.1'
             moodle-branch: 'MOODLE_401_STABLE'
             database: mariadb
-            extensions: xmlrpc-beta
           - php: '8.1'
             moodle-branch: 'MOODLE_402_STABLE'
             database: pgsql
