@@ -75,6 +75,7 @@ const saveVote = function(saveSortVoteElement) {
             saveSortVoteElement.style.display = 'none';
             jQuery('ul#sortvotinglist > li.optionitem').each(function (index, element) {
                 element.classList.remove('optionitem', 'draggable');
+                element.classList.add('bg-gray-100');
                 element.removeAttribute('draggable');
                 element.removeAttribute('data-drag-type');
             });
