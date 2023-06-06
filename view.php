@@ -46,8 +46,6 @@ $PAGE->set_context($modulecontext);
 $PAGE->add_body_class('limitedwidth');
 $PAGE->activityheader->set_attrs([]);
 
-// TODO: Check if we want to include responses from inactive users.
-
 $output = $PAGE->get_renderer('mod_sortvoting');
 echo $output->header();
 if (is_enrolled($modulecontext, null, 'mod/sortvoting:vote')) {
