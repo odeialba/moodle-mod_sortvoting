@@ -67,8 +67,6 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         // Adding the rest of mod_sortvoting settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('header', 'optionhdr', get_string('options', 'sortvoting'));
-        $string['optionno'] = 'Option {no}';
-        $string['options'] = 'Options';
 
         $mform->addElement('selectyesno', 'allowupdate', get_string("allowupdate", "sortvoting"));
         $mform->addHelpButton('allowupdate', 'allowupdate', 'mod_sortvoting');
