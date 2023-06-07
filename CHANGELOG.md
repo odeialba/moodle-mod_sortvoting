@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3 - 2023-06-07
+### Changed
+- Changed all text strings from Sort Voting to Preference Voting for a better understanding of the functionality.
+
 ## 1.0.2 - 2023-06-06
 ### Changed
 - Change option background when user cannot vote or has already voted
