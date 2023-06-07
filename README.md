@@ -1,8 +1,8 @@
-# SortVoting [![Build Status](https://github.com/odeialba/moodle-mod_sortvoting/workflows/Moodle%20Plugin%20CI/badge.svg)](https://github.com/odeialba/moodle-mod_sortvoting/actions)
+# Preference Voting [![Build Status](https://github.com/odeialba/moodle-mod_sortvoting/workflows/Moodle%20Plugin%20CI/badge.svg)](https://github.com/odeialba/moodle-mod_sortvoting/actions)
 
-This plugin allows sorting a list of options by preference of the user, instead of just selecting one.
+This plugin lets you rank multiple options in order of preference, instead of just choosing one.
 
-The problem with the ordinary voting (selecting A or B) is that if many people hate the winning option but the majority votes for it, it will win. This plugin will allow users to set in order the preference of multiple options.
+This way, the most preferred option by all the voters can win, even if it is not the most popular one.
 
 ## Examples:
 **Setup:**

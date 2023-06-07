@@ -49,7 +49,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         $params = [
             'course' => $course->id,
             'option' => $options,
-            'name' => 'First Sort Voting Activity',
+            'name' => 'First Preference Voting Activity',
             'showpreview' => 0
         ];
 
