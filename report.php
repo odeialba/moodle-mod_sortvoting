@@ -49,6 +49,12 @@ $output = $PAGE->get_renderer('mod_sortvoting');
 echo $output->header();
 // Teacher can see results.
 if (has_capability('mod/sortvoting:readresponses', $modulecontext)) {
+    // Check to see if groups are being used here.
+    if ($groupmode = groups_get_activity_groupmode($cm)) {   // Groups are being used.
+        $currentgroup = groups_get_activity_group($cm, true);
+        groups_print_activity_menu($cm, $CFG->wwwroot . "/mod/sortvoting/report.php?id=$cm->id");
+    }
+
     $votingresults = new \mod_sortvoting\output\sort_voting_results($sortvoting);
     echo $output->render($votingresults);
     // TODO: Add an option to download reports.

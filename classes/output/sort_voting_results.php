@@ -48,27 +48,13 @@ class sort_voting_results implements \templatable, \renderable {
     public function export_for_template(renderer_base $output): array {
         global $DB;
 
-        $sql = "SELECT so.id,
-                    ROUND(AVG(sa.position), 2) AS avg,
-                    so.text
-                FROM {sortvoting_answers} sa
-                    JOIN {sortvoting_options} so
-                        ON sa.optionid = so.id
-                WHERE so.sortvotingid = :sortvotingid
-                GROUP BY so.id
-                ORDER BY avg ASC";
-        $existingvotes = $DB->get_records_sql($sql, ['sortvotingid' => $this->sortvoting->id]);
+        $cm = get_coursemodule_from_instance('sortvoting', $this->sortvoting->id, $this->sortvoting->course);
+        $sortvoting = $DB->get_record('sortvoting', ['id' => $this->sortvoting->id], '*', MUST_EXIST);
+        $groupmode = groups_get_activity_groupmode($cm);
+        $onlyactive = true;
 
-        $position = 1;
-        $previousvote = null;
-        foreach ($existingvotes as $key => $vote) {
-            if ($previousvote !== null && $previousvote->avg !== $vote->avg) {
-                $position++;
-            }
-            $existingvotes[$key]->position = $position;
-            $previousvote = $vote;
-        }
+        $existingvotes = sortvoting_get_response_data($sortvoting, $cm, $groupmode, $onlyactive);
 
-        return ['votes' => array_values($existingvotes)];
+        return ['votes' => $existingvotes];
     }
 }

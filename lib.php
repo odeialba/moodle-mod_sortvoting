@@ -339,6 +339,61 @@ function sortvoting_get_sortvoting($sortvotingid) {
 }
 
 /**
+ * Get all the responses for a sortvoting.
+ *
+ * @param stdClass $sortvoting
+ * @param stdClass $cm
+ * @param int $groupmode
+ * @param bool $onlyactive Whether to get response data for active users only.
+ * @return array
+ */
+function sortvoting_get_response_data(stdClass $sortvoting, stdClass $cm, int $groupmode, bool $onlyactive = true): array {
+    global $CFG, $USER, $DB;
+
+    $context = context_module::instance($cm->id);
+
+    // Get the current group.
+    if ($groupmode > 0) {
+        $currentgroup = groups_get_activity_group($cm);
+    } else {
+        $currentgroup = 0;
+    }
+
+    // Get all the users from the group.
+    // TODO Does not support custom user profile fields (MDL-70456).
+    $userfieldsapi = \core_user\fields::for_identity($context, false)->with_userpic();
+    $userfields = $userfieldsapi->get_sql('u', false, '', '', false)->selects;
+    $users = get_enrolled_users($context, 'mod/sortvoting:vote', $currentgroup, $userfields, null, 0, 0, $onlyactive);
+    $userids = array_keys($users);
+
+    [$useridssql, $params] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+    $useridssql = "AND sa.userid $useridssql";
+
+    $sql = "SELECT so.id,
+                    ROUND(AVG(sa.position), 2) AS avg,
+                    so.text
+                FROM {sortvoting_answers} sa
+                    JOIN {sortvoting_options} so
+                        ON sa.optionid = so.id
+                WHERE so.sortvotingid = :sortvotingid $useridssql
+                GROUP BY so.id
+                ORDER BY avg ASC";
+    $existingvotes = $DB->get_records_sql($sql, ['sortvotingid' => $sortvoting->id] + $params);
+
+    $position = 1;
+    $previousvote = null;
+    foreach ($existingvotes as $key => $vote) {
+        if ($previousvote !== null && $previousvote->avg !== $vote->avg) {
+            $position++;
+        }
+        $existingvotes[$key]->position = $position;
+        $previousvote = $vote;
+    }
+
+    return array_values($existingvotes);
+}
+
+/**
  * This creates new calendar events given as timeopen and timeclose by $sortvoting.
  *
  * @param \stdClass $sortvoting
