@@ -31,10 +31,10 @@ $id = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('sortvoting', $id, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
 $sortvoting = $DB->get_record('sortvoting', ['id' => $cm->instance], '*', MUST_EXIST);
+$modulecontext = context_module::instance($cm->id);
 
 require_login($course, true, $cm);
-
-$modulecontext = context_module::instance($cm->id);
+require_capability('mod/sortvoting:readresponses', $modulecontext);
 
 $PAGE->set_url('/mod/sortvoting/report.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($sortvoting->name));
@@ -47,18 +47,13 @@ $PAGE->activityheader->set_attrs([]);
 
 $output = $PAGE->get_renderer('mod_sortvoting');
 echo $output->header();
-// Teacher can see results.
-if (has_capability('mod/sortvoting:readresponses', $modulecontext)) {
-    // Check to see if groups are being used here.
-    if ($groupmode = groups_get_activity_groupmode($cm)) {   // Groups are being used.
-        $currentgroup = groups_get_activity_group($cm, true);
-        groups_print_activity_menu($cm, $CFG->wwwroot . "/mod/sortvoting/report.php?id=$cm->id");
-    }
 
-    $votingresults = new \mod_sortvoting\output\sort_voting_results($sortvoting);
-    echo $output->render($votingresults);
-    // TODO: Add an option to download reports.
-} else {
-    echo $OUTPUT->notification(get_string('errornopermissionviewreports', 'sortvoting'), 'notifyproblem');
-}
+// Show groups menu.
+groups_print_activity_menu($cm, $CFG->wwwroot . "/mod/sortvoting/report.php?id=$cm->id");
+
+// Show the report.
+$votingresults = new \mod_sortvoting\output\sort_voting_results($sortvoting);
+echo $output->render($votingresults);
+// TODO: Add an option to download reports.
+
 echo $output->footer($course);

@@ -35,7 +35,6 @@ $string['calendarstart'] = '{$a} opens';
 $string['completiondetail:submit'] = 'Submit vote';
 $string['completionsubmit'] = 'Student must submit a vote to complete this activity';
 $string['errorduplicatedposition'] = 'All positions must be unique.';
-$string['errornopermissionviewreports'] = 'No permission to view reports';
 $string['modulename'] = 'Preference Voting';
 $string['modulenameplural'] = 'Preference Votings';
 $string['notenrolledsort'] = 'Sorry, only enrolled users are allowed to vote.';

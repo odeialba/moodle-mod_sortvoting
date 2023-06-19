@@ -342,28 +342,20 @@ function sortvoting_get_sortvoting($sortvotingid) {
  * Get all the responses for a sortvoting.
  *
  * @param stdClass $sortvoting
- * @param stdClass $cm
- * @param int $groupmode
  * @param bool $onlyactive Whether to get response data for active users only.
  * @return array
  */
-function sortvoting_get_response_data(stdClass $sortvoting, stdClass $cm, int $groupmode, bool $onlyactive = true): array {
-    global $CFG, $USER, $DB;
+function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = true): array {
+    global $DB;
 
+    $cm = get_coursemodule_from_instance('sortvoting', $sortvoting->id, $sortvoting->course);
     $context = context_module::instance($cm->id);
 
     // Get the current group.
-    if ($groupmode > 0) {
-        $currentgroup = groups_get_activity_group($cm);
-    } else {
-        $currentgroup = 0;
-    }
+    $currentgroup = groups_get_activity_group($cm);
 
     // Get all the users from the group.
-    // TODO Does not support custom user profile fields (MDL-70456).
-    $userfieldsapi = \core_user\fields::for_identity($context, false)->with_userpic();
-    $userfields = $userfieldsapi->get_sql('u', false, '', '', false)->selects;
-    $users = get_enrolled_users($context, 'mod/sortvoting:vote', $currentgroup, $userfields, null, 0, 0, $onlyactive);
+    $users = get_enrolled_users($context, 'mod/sortvoting:vote', $currentgroup, 'u.id', null, 0, 0, $onlyactive);
     $userids = array_keys($users);
 
     [$useridssql, $params] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);

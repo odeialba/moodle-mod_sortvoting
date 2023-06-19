@@ -46,14 +46,7 @@ class sort_voting_results implements \templatable, \renderable {
      * @return array
      */
     public function export_for_template(renderer_base $output): array {
-        global $DB;
-
-        $cm = get_coursemodule_from_instance('sortvoting', $this->sortvoting->id, $this->sortvoting->course);
-        $sortvoting = $DB->get_record('sortvoting', ['id' => $this->sortvoting->id], '*', MUST_EXIST);
-        $groupmode = groups_get_activity_groupmode($cm);
-        $onlyactive = true;
-
-        $existingvotes = sortvoting_get_response_data($sortvoting, $cm, $groupmode, $onlyactive);
+        $existingvotes = sortvoting_get_response_data($this->sortvoting);
 
         return ['votes' => $existingvotes];
     }
