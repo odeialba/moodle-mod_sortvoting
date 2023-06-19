@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4 - 2023-06-19
+### Added
+- Group mode support.
+
 ## 1.0.3 - 2023-06-07
 ### Changed
 - Changed all text strings from Sort Voting to Preference Voting for a better understanding of the functionality.
