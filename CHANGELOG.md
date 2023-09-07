@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.5 - 2023-09-07
+### Added
+- Added missing language strings.
+### Fixed
+- When users click on preference voting in the course side block of activities, they get a coding error message.
+
 ## 1.0.4 - 2023-06-19
 ### Added
 - Group mode support.

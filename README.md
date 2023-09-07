@@ -4,6 +4,8 @@ This plugin lets you rank multiple options in order of preference, instead of ju
 
 This way, the most preferred option by all the voters can win, even if it is not the most popular one.
 
+This voting method is also known as [Condorcet method](https://en.wikipedia.org/wiki/Condorcet_method).
+
 ## Examples:
 **Setup:**
 - Available options A, B, C, D
