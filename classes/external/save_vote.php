@@ -36,7 +36,6 @@ require_once($CFG->libdir . '/externallib.php');
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class save_vote extends external_api {
-
     /**
      * Returns the structure of parameters for save_vote.
      * @return external_function_parameters
@@ -49,10 +48,11 @@ class save_vote extends external_api {
                     new external_single_structure(
                         [
                             'position' => new external_value(PARAM_INT, 'Voted position of the option.', VALUE_REQUIRED),
-                            'optionid' => new external_value(PARAM_INT, 'The ID of the option.', VALUE_REQUIRED)
+                            'optionid' => new external_value(PARAM_INT, 'The ID of the option.', VALUE_REQUIRED),
                         ]
-                    ), 'Votes for the positions of the options.'
-                )
+                    ),
+                    'Votes for the positions of the options.'
+                ),
             ]
         );
     }
@@ -69,13 +69,13 @@ class save_vote extends external_api {
 
         $params = self::validate_parameters(self::execute_parameters(), [
             'sortvotingid' => $sortvotingid,
-            'votes' => $votes
+            'votes' => $votes,
         ]);
 
         if (!$sortvoting = sortvoting_get_sortvoting($params['sortvotingid'])) {
             throw new moodle_exception("invalidcoursemodule", "error");
         }
-        list($course, $cm) = get_course_and_cm_from_instance($sortvoting, 'sortvoting');
+        [$course, $cm] = get_course_and_cm_from_instance($sortvoting, 'sortvoting');
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
         \mod_sortvoting\permission::require_can_vote($context);
@@ -94,7 +94,7 @@ class save_vote extends external_api {
         return new external_single_structure(
             [
                 'success' => new external_value(PARAM_BOOL, 'Returns true on successful vote submision or throws an error'),
-                'allowupdate' => new external_value(PARAM_BOOL, 'Returns true if vote can be updated', VALUE_REQUIRED)
+                'allowupdate' => new external_value(PARAM_BOOL, 'Returns true if vote can be updated', VALUE_REQUIRED),
             ]
         );
     }

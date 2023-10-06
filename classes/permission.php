@@ -24,7 +24,6 @@ namespace mod_sortvoting;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class permission {
-
     /**
      * User can vote.
      *

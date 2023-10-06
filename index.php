@@ -22,9 +22,9 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
+require(__DIR__ . '/../../config.php');
 
-require_once(__DIR__.'/lib.php');
+require_once(__DIR__ . '/lib.php');
 
 $id = required_param('id', PARAM_INT);
 
@@ -34,7 +34,7 @@ require_course_login($course);
 $coursecontext = context_course::instance($course->id);
 
 $event = \mod_sortvoting\event\course_module_instance_list_viewed::create([
-    'context' => $coursecontext
+    'context' => $coursecontext,
 ]);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
@@ -73,11 +73,13 @@ foreach ($sortvotings as $sortvoting) {
         $link = html_writer::link(
             new moodle_url('/mod/sortvoting/view.php', ['id' => $sortvoting->coursemodule]),
             format_string($sortvoting->name, true),
-            ['class' => 'dimmed']);
+            ['class' => 'dimmed']
+        );
     } else {
         $link = html_writer::link(
             new moodle_url('/mod/sortvoting/view.php', ['id' => $sortvoting->coursemodule]),
-            format_string($sortvoting->name, true));
+            format_string($sortvoting->name, true)
+        );
     }
 
     if ($course->format == 'weeks' || $course->format == 'topics') {

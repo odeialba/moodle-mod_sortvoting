@@ -24,7 +24,7 @@ use renderer_base;
  * @copyright   2023 Odei Alba <odeialba@odeialba.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class sort_voting_form implements \templatable, \renderable {
+class sort_voting_form implements \renderable, \templatable {
     /**
      * @var \stdClass $sortvoting
      */
@@ -53,7 +53,7 @@ class sort_voting_form implements \templatable, \renderable {
             'sortvoting_answers',
             [
                 'sortvotingid' => $this->sortvoting->id,
-                'userid' => $USER->id
+                'userid' => $USER->id,
             ],
             'id ASC',
             'optionid, position'
@@ -71,12 +71,12 @@ class sort_voting_form implements \templatable, \renderable {
             $optionsclean[] = [
                 'id' => $option->id,
                 'text' => $option->text,
-                'position' => $position
+                'position' => $position,
             ];
         }
 
         // Sort $optionsclean by position.
-        usort($optionsclean, function($a, $b) {
+        usort($optionsclean, function ($a, $b) {
             return $a['position'] <=> $b['position'];
         });
 
@@ -84,7 +84,7 @@ class sort_voting_form implements \templatable, \renderable {
             'sortvotingid' => $this->sortvoting->id,
             'allowupdate' => $allowupdate,
             'options' => $optionsclean,
-            'max' => count($options)
+            'max' => count($options),
         ];
     }
 }

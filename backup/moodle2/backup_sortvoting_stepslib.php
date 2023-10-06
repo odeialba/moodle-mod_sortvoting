@@ -23,7 +23,6 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_sortvoting_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Structure definition for sortvoting.
      *
@@ -35,17 +34,25 @@ class backup_sortvoting_activity_structure_step extends backup_activity_structur
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define each element separated.
-        $sortvoting = new backup_nested_element('sortvoting', ['id'], [
-            'name', 'intro', 'introformat', 'allowupdate', 'timecreated', 'timemodified', 'completionsubmit'
-        ]);
+        $sortvoting = new backup_nested_element(
+            'sortvoting',
+            ['id'],
+            ['name', 'intro', 'introformat', 'allowupdate', 'timecreated', 'timemodified', 'completionsubmit']
+        );
 
         $options = new backup_nested_element('options');
-        $option = new backup_nested_element('option', ['id'], [
-            'text', 'timemodified']);
+        $option = new backup_nested_element(
+            'option',
+            ['id'],
+            ['text', 'timemodified']
+        );
 
         $answers = new backup_nested_element('answers');
-        $answer = new backup_nested_element('answer', ['id'], [
-            'userid', 'optionid', 'position', 'timemodified']);
+        $answer = new backup_nested_element(
+            'answer',
+            ['id'],
+            ['userid', 'optionid', 'position', 'timemodified']
+        );
 
         // Build the tree.
         $sortvoting->add_child($options);

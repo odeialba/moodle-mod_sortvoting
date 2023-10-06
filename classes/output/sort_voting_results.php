@@ -24,7 +24,7 @@ use renderer_base;
  * @copyright   2023 Odei Alba <odeialba@odeialba.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class sort_voting_results implements \templatable, \renderable {
+class sort_voting_results implements \renderable, \templatable {
     /**
      * @var \stdClass $sortvoting
      */
