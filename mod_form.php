@@ -70,6 +70,9 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         $mform->addElement('selectyesno', 'allowupdate', get_string("allowupdate", "sortvoting"));
         $mform->addHelpButton('allowupdate', 'allowupdate', 'mod_sortvoting');
 
+        $mform->addElement('selectyesno', 'allowstudentsseeresults', get_string("allowstudentsseeresults", "sortvoting"));
+        $mform->addHelpButton('allowstudentsseeresults', 'allowstudentsseeresults', 'mod_sortvoting');
+
         $repeatarray = [];
         $repeatarray[] = $mform->createElement('text', 'option', get_string('optionno', 'sortvoting'));
         $repeatarray[] = $mform->createElement('hidden', 'optionid', 0);
