@@ -34,7 +34,7 @@ $sortvoting = $DB->get_record('sortvoting', ['id' => $cm->instance], '*', MUST_E
 $modulecontext = context_module::instance($cm->id);
 
 require_login($course, true, $cm);
-require_capability('mod/sortvoting:readresponses', $modulecontext);
+\mod_sortvoting\permission::require_can_see_results($sortvoting, $modulecontext);
 
 $PAGE->set_url('/mod/sortvoting/report.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($sortvoting->name));

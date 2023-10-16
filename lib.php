@@ -540,8 +540,7 @@ function sortvoting_view($sortvoting, $course, $cm, $context) {
  * @return void
  */
 function sortvoting_extend_settings_navigation($settings, $node) {
-    // TODO: SV-24 -> Check config to allow users see votes. Check if user has voted.
-    if (has_capability('mod/sortvoting:readresponses', $settings->get_page()->cm->context)) {
+    if (\mod_sortvoting\permission::can_see_results($settings->get_page()->activityrecord, $settings->get_page()->cm->context)) {
         // We want to add these new nodes after the Settings node.
         $keys = $node->get_children_key_list();
         $beforekey = null;

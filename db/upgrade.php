@@ -39,5 +39,20 @@ function xmldb_sortvoting_upgrade($oldversion) {
     // You will also have to create the db/install.xml file by using the XMLDB Editor.
     // Documentation for the XMLDB Editor can be found at {@link https://docs.moodle.org/dev/XMLDB_editor}.
 
+    if ($oldversion < 2023101300) {
+
+        // Define field allowstudentsseeresults to be added to sortvoting.
+        $table = new xmldb_table('sortvoting');
+        $field = new xmldb_field('allowstudentsseeresults', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'allowupdate');
+
+        // Conditionally launch add field allowstudentsseeresults.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Sortvoting savepoint reached.
+        upgrade_mod_savepoint(true, 2023101300, 'sortvoting');
+    }
+
     return true;
 }

@@ -16,7 +16,7 @@
 /**
  * AMD module used when saving a new sort voting.
  *
- * @module      mod_sortvoting/issues-list
+ * @module      mod_sortvoting/sortvoting
  * @copyright   2023 Odei Alba <odeialba@odeialba.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -69,7 +69,10 @@ const saveVote = function(saveSortVoteElement) {
         } else {
             toastAdd(getString('voteerror', 'mod_sortvoting'), {type: 'danger'});
         }
-        if (result.allowupdate) {
+        if (result.seeresultsupdated) {
+            // Reload the whole page so the results tab is visible now but wasn't before (or viceversa).
+            window.location.reload();
+        } else if (result.allowupdate) {
             saveSortVoteElement.removeAttribute('disabled');
         } else {
             saveSortVoteElement.style.display = 'none';
