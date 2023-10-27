@@ -27,7 +27,6 @@ require_once($CFG->dirroot . '/mod/sortvoting/backup/moodle2/restore_sortvoting_
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_sortvoting_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have
      */
@@ -66,7 +65,6 @@ class restore_sortvoting_activity_task extends restore_activity_task {
         $rules[] = new restore_decode_rule('SORTVOTINGINDEX', '/mod/sortvoting/index.php?id=$1', 'course');
 
         return $rules;
-
     }
 
     /**

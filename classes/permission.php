@@ -24,7 +24,6 @@ namespace mod_sortvoting;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class permission {
-
     /**
      * User can vote.
      *
@@ -42,5 +41,40 @@ class permission {
      */
     public static function require_can_vote(\context_module $context) {
         require_capability('mod/sortvoting:vote', $context);
+    }
+
+
+    /**
+     * User can see results.
+     *
+     * @param \stdClass $sortvoting
+     * @param \context_module $context
+     * @return bool
+     */
+    public static function can_see_results(\stdClass $sortvoting, \context_module $context): bool {
+        global $DB, $USER;
+
+        $studenthasvoted = $DB->record_exists(
+            'sortvoting_answers',
+            [
+                'sortvotingid' => $sortvoting->id,
+                'userid' => $USER->id,
+            ]
+        );
+        $allowstudentsseeresults = $sortvoting->allowstudentsseeresults ?? false;
+
+        return has_capability('mod/sortvoting:readresponses', $context) || ($allowstudentsseeresults && $studenthasvoted);
+    }
+
+    /**
+     * Make sure user can see results.
+     *
+     * @param \stdClass $sortvoting
+     * @param \context_module $context
+     */
+    public static function require_can_see_results(\stdClass $sortvoting, \context_module $context) {
+        if (!self::can_see_results($sortvoting, $context)) {
+            throw new \moodle_exception('nopermissionstoseeresponses', 'mod_sortvoting');
+        }
     }
 }

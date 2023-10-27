@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 /**
  * Module instance settings form.
@@ -34,7 +34,6 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_sortvoting_mod_form extends moodleform_mod {
-
     /**
      * Defines forms elements
      */
@@ -71,6 +70,9 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         $mform->addElement('selectyesno', 'allowupdate', get_string("allowupdate", "sortvoting"));
         $mform->addHelpButton('allowupdate', 'allowupdate', 'mod_sortvoting');
 
+        $mform->addElement('selectyesno', 'allowstudentsseeresults', get_string("allowstudentsseeresults", "sortvoting"));
+        $mform->addHelpButton('allowstudentsseeresults', 'allowstudentsseeresults', 'mod_sortvoting');
+
         $repeatarray = [];
         $repeatarray[] = $mform->createElement('text', 'option', get_string('optionno', 'sortvoting'));
         $repeatarray[] = $mform->createElement('hidden', 'optionid', 0);
@@ -87,8 +89,16 @@ class mod_sortvoting_mod_form extends moodleform_mod {
 
         $mform->setType('optionid', PARAM_INT);
 
-        $this->repeat_elements($repeatarray, $repeatno,
-                    $repeateloptions, 'option_repeats', 'option_add_fields', 3, null, true);
+        $this->repeat_elements(
+            $repeatarray,
+            $repeatno,
+            $repeateloptions,
+            'option_repeats',
+            'option_add_fields',
+            3,
+            null,
+            true
+        );
 
         // Make the first two options required.
         if ($mform->elementExists('option[0]')) {
@@ -115,13 +125,14 @@ class mod_sortvoting_mod_form extends moodleform_mod {
      **/
     public function data_preprocessing(&$defaultvalues) {
         global $DB;
-        if (!empty($this->_instance) &&
-                ($options = $DB->get_records('sortvoting_options', ['sortvotingid' => $this->_instance], 'id ASC'))) {
-
+        if (
+            !empty($this->_instance) &&
+            ($options = $DB->get_records('sortvoting_options', ['sortvotingid' => $this->_instance], 'id ASC'))
+        ) {
             $key = 0;
             foreach ($options as $option) {
-                $defaultvalues['option['.$key.']'] = $option->text;
-                $defaultvalues['optionid['.$key.']'] = $option->id;
+                $defaultvalues['option[' . $key . ']'] = $option->text;
+                $defaultvalues['optionid[' . $key . ']'] = $option->id;
                 $key++;
             }
         }

@@ -55,7 +55,9 @@
 }}
 <input type="hidden" name="sortvotingid" value="{{sortvotingid}}" />
 
-{{! Make this list drag and drop sortable. }}
+<div class="mb-3">{{#str}}instructions, mod_sortvoting{{/str}}</div>
+
+{{! This list is drag and drop sortable. }}
 <ul id="sortvotinglist" class="fa-ul">
 {{#options}}
     <li class="d-flex card p-3 mb-2 {{^allowupdate}}bg-gray-100{{/allowupdate}} {{#allowupdate}}optionitem draggable{{/allowupdate}}" {{#allowupdate}}data-drag-type="move" draggable="true"{{/allowupdate}}>
@@ -67,6 +69,7 @@
     </li>
 {{/options}}
 </ul>
+
 {{#allowupdate}}
 <button class="btn btn-primary" data-action="savevote" title="{{#str}} save {{/str}}">{{#str}} save {{/str}}</button>
 {{#js}}

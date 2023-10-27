@@ -32,7 +32,6 @@ require_once($CFG->dirroot . '/mod/sortvoting/lib.php');
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class lib_test extends \externallib_advanced_testcase {
-
     /**
      * Tests events after sortvoting is viewed.
      *
@@ -47,7 +46,7 @@ class lib_test extends \externallib_advanced_testcase {
         $this->setAdminUser();
         // Setup test data.
         $course = $this->getDataGenerator()->create_course();
-        $sortvoting = $this->getDataGenerator()->create_module('sortvoting', array('course' => $course->id));
+        $sortvoting = $this->getDataGenerator()->create_module('sortvoting', ['course' => $course->id]);
         $context = \context_module::instance($sortvoting->cmid);
         $cm = get_coursemodule_from_instance('sortvoting', $sortvoting->id);
 
@@ -63,7 +62,7 @@ class lib_test extends \externallib_advanced_testcase {
         // Checking that the event contains the expected values.
         $this->assertInstanceOf('\mod_sortvoting\event\course_module_viewed', $event);
         $this->assertEquals($context, $event->get_context());
-        $url = new \moodle_url('/mod/sortvoting/view.php', array('id' => $cm->id));
+        $url = new \moodle_url('/mod/sortvoting/view.php', ['id' => $cm->id]);
         $this->assertEquals($url, $event->get_url());
         $this->assertEventContextNotUsed($event);
         $this->assertNotEmpty($event->get_name());
@@ -86,12 +85,12 @@ class lib_test extends \externallib_advanced_testcase {
         $sortvoting1 = $this->getDataGenerator()->create_module('sortvoting', [
             'course' => $course->id,
             'completion' => 2,
-            'completionsubmit' => 1
+            'completionsubmit' => 1,
         ]);
         $sortvoting2 = $this->getDataGenerator()->create_module('sortvoting', [
             'course' => $course->id,
             'completion' => 2,
-            'completionsubmit' => 0
+            'completionsubmit' => 0,
         ]);
         $cm1 = \cm_info::create(get_coursemodule_from_instance('sortvoting', $sortvoting1->id));
         $cm2 = \cm_info::create(get_coursemodule_from_instance('sortvoting', $sortvoting2->id));

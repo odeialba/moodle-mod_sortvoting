@@ -27,7 +27,6 @@ require_once($CFG->dirroot . '/mod/sortvoting/backup/moodle2/backup_sortvoting_s
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_sortvoting_activity_task extends backup_activity_task {
-
     /**
      * Define (add) particular settings this activity can have
      */

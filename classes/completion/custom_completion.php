@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace mod_sortvoting\completion;
 
@@ -31,7 +31,6 @@ use core_completion\activity_custom_completion;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class custom_completion extends activity_custom_completion {
-
     /**
      * Fetches the completion state for a given completion rule.
      *
@@ -55,7 +54,7 @@ class custom_completion extends activity_custom_completion {
      */
     public static function get_defined_custom_rules(): array {
         return [
-            'completionsubmit'
+            'completionsubmit',
         ];
     }
 
@@ -66,7 +65,7 @@ class custom_completion extends activity_custom_completion {
      */
     public function get_custom_rule_descriptions(): array {
         return [
-            'completionsubmit' => get_string('completiondetail:submit', 'sortvoting')
+            'completionsubmit' => get_string('completiondetail:submit', 'sortvoting'),
         ];
     }
 

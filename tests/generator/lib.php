@@ -23,7 +23,6 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_sortvoting_generator extends testing_module_generator {
-
     /**
      * Create an instance for testing mod_sortvoting.
      *
@@ -38,7 +37,7 @@ class mod_sortvoting_generator extends testing_module_generator {
             $record->timemodified = time();
         }
         if (!isset($record->option)) {
-            $record->option = array();
+            $record->option = [];
             $record->option[] = 'Soft Drink';
             $record->option[] = 'Beer';
             $record->option[] = 'Wine';

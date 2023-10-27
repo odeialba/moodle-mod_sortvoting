@@ -89,8 +89,12 @@ function sortvoting_add_instance($sortvoting, $mform = null) {
     // Add calendar events if necessary.
     sortvoting_set_events($sortvoting);
     if (!empty($sortvoting->completionexpected)) {
-        \core_completion\api::update_completion_date_event($sortvoting->coursemodule, 'sortvoting', $sortvoting->id,
-            $sortvoting->completionexpected);
+        \core_completion\api::update_completion_date_event(
+            $sortvoting->coursemodule,
+            'sortvoting',
+            $sortvoting->id,
+            $sortvoting->completionexpected
+        );
     }
 
     return $sortvoting->id;
@@ -138,12 +142,16 @@ function sortvoting_update_instance($sortvoting, $mform = null) {
     // Add calendar events if necessary.
     sortvoting_set_events($sortvoting);
     $completionexpected = (!empty($sortvoting->completionexpected)) ? $sortvoting->completionexpected : null;
-    \core_completion\api::update_completion_date_event($sortvoting->coursemodule, 'sortvoting', $sortvoting->id,
-        $completionexpected);
+    \core_completion\api::update_completion_date_event(
+        $sortvoting->coursemodule,
+        'sortvoting',
+        $sortvoting->id,
+        $completionexpected
+    );
 
     return $DB->update_record('sortvoting', $sortvoting);
-
 }
+
 /**
  * Removes an instance of the mod_sortvoting from the database.
  *
@@ -173,7 +181,7 @@ function sortvoting_delete_instance($id) {
     }
 
     // Remove old calendar events.
-    if (! $DB->delete_records('event', array('modulename' => 'sortvoting', 'instance' => $id))) {
+    if (! $DB->delete_records('event', ['modulename' => 'sortvoting', 'instance' => $id])) {
         $result = false;
     }
 
@@ -202,7 +210,7 @@ function sortvoting_user_submit_response($sortvoting, array $votes, $course, $cm
             'userid' => $USER->id,
             'sortvotingid' => $sortvoting->id,
             'position' => $vote['position'],
-            'optionid' => $vote['optionid']
+            'optionid' => $vote['optionid'],
         ];
     }
 
@@ -216,9 +224,10 @@ function sortvoting_user_submit_response($sortvoting, array $votes, $course, $cm
         'sortvoting_answers',
         [
             'sortvotingid' => $sortvoting->id,
-            'userid' => $USER->id
+            'userid' => $USER->id,
         ],
-        'id ASC', 'optionid, position'
+        'id ASC',
+        'optionid, position'
     );
     if (!empty($existingvotes)) {
         $DB->delete_records('sortvoting_answers', ['sortvotingid' => $sortvoting->id, 'userid' => $USER->id]);
@@ -299,8 +308,10 @@ function sortvoting_get_coursemodule_info($coursemodule) {
  */
 function mod_sortvoting_get_completion_active_rule_descriptions($cm) {
     // Values will be present in cm_info, and we assume these are up to date.
-    if (empty($cm->customdata['customcompletionrules'])
-        || $cm->completion != COMPLETION_TRACKING_AUTOMATIC) {
+    if (
+        empty($cm->customdata['customcompletionrules'])
+        || $cm->completion != COMPLETION_TRACKING_AUTOMATIC
+    ) {
         return [];
     }
     $descriptions = [];
@@ -327,8 +338,8 @@ function mod_sortvoting_get_completion_active_rule_descriptions($cm) {
 function sortvoting_get_sortvoting($sortvotingid) {
     global $DB;
 
-    if ($sortvoting = $DB->get_record("sortvoting", array("id" => $sortvotingid))) {
-        if ($options = $DB->get_records("sortvoting_options", array("sortvotingid" => $sortvotingid), "id")) {
+    if ($sortvoting = $DB->get_record("sortvoting", ["id" => $sortvotingid])) {
+        if ($options = $DB->get_records("sortvoting_options", ["sortvotingid" => $sortvotingid], "id")) {
             foreach ($options as $option) {
                 $sortvoting->option[$option->id] = $option->text;
             }
@@ -394,7 +405,7 @@ function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = t
 function sortvoting_set_events($sortvoting) {
     global $DB, $CFG;
 
-    require_once($CFG->dirroot.'/calendar/lib.php');
+    require_once($CFG->dirroot . '/calendar/lib.php');
 
     // Get CMID if not sent as part of $sortvoting.
     if (!isset($sortvoting->coursemodule)) {
@@ -407,8 +418,13 @@ function sortvoting_set_events($sortvoting) {
     $event->eventtype = SORTVOTING_EVENT_TYPE_OPEN;
     // The SORTVOTING_EVENT_TYPE_OPEN event should only be an action event if no close time is specified.
     $event->type = empty($sortvoting->timeclose) ? CALENDAR_EVENT_TYPE_ACTION : CALENDAR_EVENT_TYPE_STANDARD;
-    if ($event->id = $DB->get_field('event', 'id',
-            array('modulename' => 'sortvoting', 'instance' => $sortvoting->id, 'eventtype' => $event->eventtype))) {
+    if (
+        $event->id = $DB->get_field(
+            'event',
+            'id',
+            ['modulename' => 'sortvoting', 'instance' => $sortvoting->id, 'eventtype' => $event->eventtype]
+        )
+    ) {
         if ((!empty($sortvoting->timeopen)) && ($sortvoting->timeopen > 0)) {
             // Calendar event exists so update it.
             $event->name = get_string('calendarstart', 'sortvoting', $sortvoting->name);
@@ -448,8 +464,13 @@ function sortvoting_set_events($sortvoting) {
     $event = new \stdClass();
     $event->type = CALENDAR_EVENT_TYPE_ACTION;
     $event->eventtype = SORTVOTING_EVENT_TYPE_CLOSE;
-    if ($event->id = $DB->get_field('event', 'id',
-            array('modulename' => 'sortvoting', 'instance' => $sortvoting->id, 'eventtype' => $event->eventtype))) {
+    if (
+        $event->id = $DB->get_field(
+            'event',
+            'id',
+            ['modulename' => 'sortvoting', 'instance' => $sortvoting->id, 'eventtype' => $event->eventtype]
+        )
+    ) {
         if ((!empty($sortvoting->timeclose)) && ($sortvoting->timeclose > 0)) {
             // Calendar event exists so update it.
             $event->name = get_string('calendarend', 'sortvoting', $sortvoting->name);
@@ -498,7 +519,7 @@ function sortvoting_view($sortvoting, $course, $cm, $context) {
     // Trigger course_module_viewed event.
     $params = [
         'objectid' => $sortvoting->id,
-        'context' => $context
+        'context' => $context,
     ];
     $event = \mod_sortvoting\event\course_module_viewed::create($params);
     $event->add_record_snapshot('course_modules', $cm);
@@ -519,7 +540,7 @@ function sortvoting_view($sortvoting, $course, $cm, $context) {
  * @return void
  */
 function sortvoting_extend_settings_navigation($settings, $node) {
-    if (has_capability('mod/sortvoting:readresponses', $settings->get_page()->cm->context)) {
+    if (\mod_sortvoting\permission::can_see_results($settings->get_page()->activityrecord, $settings->get_page()->cm->context)) {
         // We want to add these new nodes after the Settings node.
         $keys = $node->get_children_key_list();
         $beforekey = null;
@@ -531,8 +552,11 @@ function sortvoting_extend_settings_navigation($settings, $node) {
         }
 
         $url = new moodle_url('/mod/sortvoting/report.php', ['id' => $settings->get_page()->cm->id]);
-        $messagesnode = navigation_node::create(get_string('responses', 'mod_sortvoting'),
-                $url, navigation_node::TYPE_SETTING);
+        $messagesnode = navigation_node::create(
+            get_string('responses', 'mod_sortvoting'),
+            $url,
+            navigation_node::TYPE_SETTING
+        );
         $node->add_node($messagesnode, $beforekey);
     }
 }

@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['allowstudentsseeresults'] = 'Allow students to see the results';
+$string['allowstudentsseeresults_help'] = 'If enabled, users will be able to see the results once they have voted.';
 $string['allowupdate'] = 'Allow options to be updated';
 $string['allowupdate_help'] = 'If enabled, users will be able to update their votes once it is submitted.
 
@@ -35,8 +37,10 @@ $string['calendarstart'] = '{$a} opens';
 $string['completiondetail:submit'] = 'Submit vote';
 $string['completionsubmit'] = 'Student must submit a vote to complete this activity';
 $string['errorduplicatedposition'] = 'All positions must be unique.';
+$string['instructions'] = 'Change the options below into the desired order, so your preferred choice is at the top and your least favourite choice is at the bottom.';
 $string['modulename'] = 'Preference Sort Voting';
 $string['modulenameplural'] = 'Preference Sort Votings';
+$string['nopermissionstoseeresponses'] = 'You do not have permissions to see the results';
 $string['notenrolledsort'] = 'Sorry, only enrolled users are allowed to vote.';
 $string['option'] = 'Option';
 $string['optionno'] = 'Option {no}';

@@ -18,6 +18,7 @@ namespace mod_sortvoting\privacy;
 
 use core_privacy\local\metadata\collection;
 use mod_sortvoting\privacy\provider;
+use stdClass;
 
 /**
  * Privacy provider tests class.
@@ -50,7 +51,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
             'course' => $course->id,
             'option' => $options,
             'name' => 'First Preference Voting Activity',
-            'showpreview' => 0
+            'showpreview' => 0,
         ];
 
         $plugingenerator = $generator->get_plugin_generator('mod_sortvoting');
@@ -63,7 +64,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         // Create a student which will make a sortvoting.
         $student = $generator->create_user();
         $studentrole = $DB->get_record('role', ['shortname' => 'student']);
-        $generator->enrol_user($student->id,  $course->id, $studentrole->id);
+        $generator->enrol_user($student->id, $course->id, $studentrole->id);
 
         $sortvotingwithoptions = sortvoting_get_sortvoting($sortvoting->id);
         $optionids = array_keys($sortvotingwithoptions->option);
@@ -75,7 +76,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         foreach ($optionids as $optionid) {
             $votes[] = [
                 'optionid' => $optionid,
-                'position' => $i++
+                'position' => $i++,
             ];
         }
 
@@ -163,7 +164,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         foreach ($optionids as $optionid) {
             $votes[] = [
                 'optionid' => $optionid,
-                'position' => $i++
+                'position' => $i++,
             ];
         }
 
@@ -202,7 +203,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
             'course' => $this->course->id,
             'option' => $options,
             'name' => 'Which do you think is the best island in the Philippines?',
-            'showpreview' => 0
+            'showpreview' => 0,
         ];
         $plugingenerator = $generator->get_plugin_generator('mod_sortvoting');
         $sortvoting2 = $plugingenerator->create_instance($params);
@@ -220,7 +221,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         foreach ($optionids as $optionid) {
             $votes[] = [
                 'optionid' => $optionid,
-                'position' => $i++
+                'position' => $i++,
             ];
         }
 
@@ -243,7 +244,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         foreach ($optionids as $optionid) {
             $votes[] = [
                 'optionid' => $optionid,
-                'position' => $i++
+                'position' => $i++,
             ];
         }
 
@@ -258,8 +259,11 @@ class provider_test extends \core_privacy\tests\provider_testcase {
 
         $context1 = \context_module::instance($cm1->id);
         $context2 = \context_module::instance($cm2->id);
-        $contextlist = new \core_privacy\local\request\approved_contextlist($this->student, 'sortvoting',
-            [\context_system::instance()->id, $context1->id, $context2->id]);
+        $contextlist = new \core_privacy\local\request\approved_contextlist(
+            $this->student,
+            'sortvoting',
+            [\context_system::instance()->id, $context1->id, $context2->id]
+        );
         provider::delete_data_for_user($contextlist);
 
         // After deletion, the sortvoting answers for the first student should have been deleted.
@@ -287,8 +291,8 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         \mod_sortvoting\privacy\provider::get_users_in_context($userlist);
 
         $this->assertEquals(
-                [$this->student->id],
-                $userlist->get_userids()
+            [$this->student->id],
+            $userlist->get_userids()
         );
     }
 
@@ -322,7 +326,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
             'course' => $this->course->id,
             'option' => $options,
             'name' => 'Which do you think is the best island in the Philippines?',
-            'showpreview' => 0
+            'showpreview' => 0,
         ];
         $plugingenerator = $generator->get_plugin_generator('mod_sortvoting');
         $sortvoting2 = $plugingenerator->create_instance($params);
@@ -340,7 +344,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         foreach ($optionids as $optionid) {
             $votes[] = [
                 'optionid' => $optionid,
-                'position' => $i++
+                'position' => $i++,
             ];
         }
 
@@ -362,7 +366,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         foreach ($optionids as $optionid) {
             $votes[] = [
                 'optionid' => $optionid,
-                'position' => $i++
+                'position' => $i++,
             ];
         }
 
@@ -377,7 +381,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         foreach ($optionids as $optionid) {
             $votes[] = [
                 'optionid' => $optionid,
-                'position' => $i++
+                'position' => $i++,
             ];
         }
 
@@ -391,8 +395,11 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         $this->assertEquals($expectedanswercount, $count);
 
         $context1 = \context_module::instance($cm1->id);
-        $approveduserlist = new \core_privacy\local\request\approved_userlist($context1, 'sortvoting',
-                [$this->student->id, $otherstudent->id]);
+        $approveduserlist = new \core_privacy\local\request\approved_userlist(
+            $context1,
+            'sortvoting',
+            [$this->student->id, $otherstudent->id]
+        );
         provider::delete_data_for_users($approveduserlist);
 
         // After deletion, the sortvoting answers of the 2 students provided above should have been deleted
