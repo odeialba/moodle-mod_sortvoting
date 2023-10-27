@@ -3,7 +3,7 @@
 ## 1.0.6 - 2023-10-27
 ### Added
 - Added an option to show the results of the voting to the students.
-- Added stardard instructions to the activity.
+- Added standard instructions to the activity.
 ### Fixed
 - Fix all the codechecker errors.
 
