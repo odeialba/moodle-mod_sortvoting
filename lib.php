@@ -373,8 +373,9 @@ function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = t
     $useridssql = "AND sa.userid $useridssql";
 
     $sql = "SELECT so.id,
-                    ROUND(AVG(sa.position), 2) AS avg,
-                    so.text
+                    AVG(sa.position) AS avg,
+                    so.text,
+                    COUNT(sa.id) AS votescount
                 FROM {sortvoting_answers} sa
                     JOIN {sortvoting_options} so
                         ON sa.optionid = so.id
@@ -385,11 +386,13 @@ function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = t
 
     $position = 1;
     $previousvote = null;
+    $maxvotescount = (int) max(array_column($existingvotes, 'votescount'));
     foreach ($existingvotes as $key => $vote) {
         if ($previousvote !== null && $previousvote->avg !== $vote->avg) {
             $position++;
         }
         $existingvotes[$key]->position = $position;
+        $existingvotes[$key]->showvotescount = $maxvotescount !== (int) $vote->votescount;
         $previousvote = $vote;
     }
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.7 - 2023-11-10
+### Changed
+- Added more precision to the calculation of the position on the results.
+### Added
+- Added ci changes for Moodle 4.3.
+- Added the number of received votes to the results table. If there is an option with less votes than the rest, the number of votes will be shown next to the position.
+### Fixed
+- Fix the margins in the results page and the voting options.
+- Fix & character in the options.
+
 ## 1.0.6 - 2023-10-27
 ### Added
 - Added an option to show the results of the voting to the students.

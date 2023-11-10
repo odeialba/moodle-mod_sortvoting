@@ -21,46 +21,75 @@
 
     Example context (json):
     {
+        "maxvotescount": "5",
         "votes": [
             {
                 "id": "1",
                 "position": "1",
-                "text": "A"
+                "text": "A",
+                "showvotescount": false,
+                "votescount": "5"
             },
             {
                 "id": "2",
                 "position": "2",
-                "text": "B"
+                "text": "B",
+                "showvotescount": false,
+                "votescount": "5"
             },
             {
                 "id": "3",
                 "position": "2",
-                "text": "C"
+                "text": "C",
+                "showvotescount": false,
+                "votescount": "5"
             },
             {
                 "id": "4",
                 "position": "3",
-                "text": "D"
+                "text": "D",
+                "showvotescount": true,
+                "votescount": "4"
             },
             {
                 "id": "5",
                 "position": "4",
-                "text": "E"
+                "text": "E",
+                "showvotescount": false,
+                "votescount": "5"
             }
         ]
     }
 }}
-<table class="m-3 table table-bordered">
+<table class="table table-bordered">
     <thead>
         <tr>
-            <th class="w-25">{{#str}} position, mod_sortvoting {{/str}}</th>
+            <th class="w-25">
+                <div
+                    data-toggle="tooltip"
+                    data-placement="left"
+                    class="text-info"
+                    title="{{#str}} xvotesreceived, mod_sortvoting, {{maxvotescount}} {{/str}}"
+                >
+                    {{#str}} position, mod_sortvoting {{/str}}
+                </div>
+            </th>
             <th class="w-75">{{#str}} option, mod_sortvoting {{/str}}</th>
         </tr>
     </thead>
     <tbody>
         {{#votes}}
             <tr>
-                <td>{{position}}</td>
+                <td>
+                    <div {{#showvotescount}}
+                        data-toggle="tooltip"
+                        data-placement="left"
+                        class="text-info"
+                        title="{{#str}} xvotesreceived, mod_sortvoting, {{votescount}} {{/str}}"
+                    {{/showvotescount}} >
+                        {{position}}
+                    </div>
+                </td>
                 <td>{{text}}</td>
             </tr>
         {{/votes}}
