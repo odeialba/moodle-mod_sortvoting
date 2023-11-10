@@ -373,7 +373,7 @@ function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = t
     $useridssql = "AND sa.userid $useridssql";
 
     $sql = "SELECT so.id,
-                    ROUND(AVG(sa.position), 2) AS avg,
+                    AVG(sa.position) AS avg,
                     so.text
                 FROM {sortvoting_answers} sa
                     JOIN {sortvoting_options} so
