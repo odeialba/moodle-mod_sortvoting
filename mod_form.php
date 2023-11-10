@@ -85,7 +85,7 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         }
 
         $repeateloptions['option']['helpbutton'] = ['sortoptions', 'sortvoting'];
-        $mform->setType('option', PARAM_CLEANHTML);
+        $mform->setType('option', PARAM_TEXT);
 
         $mform->setType('optionid', PARAM_INT);
 
