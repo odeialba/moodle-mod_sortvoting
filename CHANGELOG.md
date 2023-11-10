@@ -5,6 +5,7 @@
 - Added more precision to the calculation of the position on the results.
 ### Added
 - Added ci changes for Moodle 4.3.
+- Added the number of received votes to the results table. If there is an option with less votes than the rest, the number of votes will be shown next to the position.
 ### Fixed
 - Fix the margins in the results page and the voting options.
 - Fix & character in the options.
