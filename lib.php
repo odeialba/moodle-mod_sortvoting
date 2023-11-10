@@ -392,7 +392,7 @@ function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = t
             $position++;
         }
         $existingvotes[$key]->position = $position;
-        $existingvotes[$key]->showvotescount = $maxvotescount === (int) $vote->votescount;
+        $existingvotes[$key]->showvotescount = $maxvotescount !== (int) $vote->votescount;
         $previousvote = $vote;
     }
 
