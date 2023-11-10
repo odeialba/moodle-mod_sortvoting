@@ -5,6 +5,7 @@
 - Added ci changes for Moodle 4.3.
 ### Fixed
 - Fix the margins in the results page and the voting options.
+- Fix & character in the options.
 
 ## 1.0.6 - 2023-10-27
 ### Added
