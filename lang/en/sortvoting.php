@@ -71,3 +71,4 @@ $string['sortvotingname_help'] = 'This will be the name used to identify this el
 $string['sortvotingsettings'] = 'Voting name';
 $string['voteerror'] = 'There was an error saving your vote.';
 $string['votesuccess'] = 'Your vote has been saved successfully.';
+$string['xvotesreceived'] = '{$a} vote(s) received';

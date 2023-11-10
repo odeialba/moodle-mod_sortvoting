@@ -47,7 +47,8 @@ class sort_voting_results implements \renderable, \templatable {
      */
     public function export_for_template(renderer_base $output): array {
         $existingvotes = sortvoting_get_response_data($this->sortvoting);
+        $maxvotescount = (int) max(array_column($existingvotes, 'votescount'));
 
-        return ['votes' => $existingvotes];
+        return ['votes' => $existingvotes, 'maxvotescount' => $maxvotescount];
     }
 }
