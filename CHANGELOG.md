@@ -1,6 +1,8 @@
 # Changelog
 
 ## 1.0.7 - 2023-11-10
+### Changed
+- Added more precision to the calculation of the position on the results.
 ### Added
 - Added ci changes for Moodle 4.3.
 ### Fixed
