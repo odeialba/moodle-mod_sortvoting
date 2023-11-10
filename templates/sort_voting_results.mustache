@@ -81,13 +81,13 @@
         {{#votes}}
             <tr>
                 <td>
-                    <div {{^showvotescount}}
+                    <div {{#showvotescount}}
                         data-toggle="tooltip"
                         data-placement="left"
                         class="text-info"
                         title="{{#str}} xvotesreceived, mod_sortvoting, {{votescount}} {{/str}}"
                     {{/showvotescount}} >
-                        {{position}}
+                        {{position}} {{showvotescount}}
                     </div>
                 </td>
                 <td>{{text}}</td>
