@@ -1,6 +1,8 @@
 # Changelog
 
 ## 1.0.7 - 2023-11-10
+### Added
+- Added ci changes for Moodle 4.3.
 ### Fixed
 - Fix the margins in the results page and the voting options.
 
