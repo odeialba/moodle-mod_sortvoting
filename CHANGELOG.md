@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.0.7 - 2023-11-10
+
 ## 1.0.6 - 2023-10-27
 ### Added
 - Added an option to show the results of the voting to the students.
