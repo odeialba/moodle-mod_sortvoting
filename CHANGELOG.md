@@ -1,6 +1,8 @@
 # Changelog
 
 ## 1.0.7 - 2023-11-10
+### Fixed
+- Fix the margins in the results page and the voting options.
 
 ## 1.0.6 - 2023-10-27
 ### Added
