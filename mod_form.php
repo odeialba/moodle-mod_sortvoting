@@ -150,8 +150,8 @@ class mod_sortvoting_mod_form extends moodleform_mod {
         parent::data_postprocessing($data);
         // Set up completion section even if checkbox is not ticked.
         if (!empty($data->completionunlocked)) {
-            if (empty($data->completionsubmit)) {
-                $data->completionsubmit = 0;
+            if (empty($data->{$this->get_suffixed_name('completionsubmit')})) {
+                $data->{$this->get_suffixed_name('completionsubmit')} = 0;
             }
         }
     }
@@ -164,10 +164,11 @@ class mod_sortvoting_mod_form extends moodleform_mod {
     public function add_completion_rules() {
         $mform =& $this->_form;
 
-        $mform->addElement('checkbox', 'completionsubmit', '', get_string('completionsubmit', 'sortvoting'));
+        $completionsubmit = $this->get_suffixed_name('completionsubmit');
+        $mform->addElement('checkbox', $completionsubmit, '', get_string('completionsubmit', 'sortvoting'));
         // Enable this completion rule by default.
-        $mform->setDefault('completionsubmit', 1);
-        return ['completionsubmit'];
+        $mform->setDefault($completionsubmit, 1);
+        return [$completionsubmit];
     }
 
     /**
@@ -177,6 +178,16 @@ class mod_sortvoting_mod_form extends moodleform_mod {
      * @return bool
      */
     public function completion_rule_enabled($data) {
-        return !empty($data['completionsubmit']);
+        return !empty($data[$this->get_suffixed_name('completionsubmit')]);
+    }
+
+    /**
+     * Returns suffixed name.
+     *
+     * @param string $fieldname
+     * @return string
+     */
+    protected function get_suffixed_name(string $fieldname): string {
+        return $fieldname . $this->get_suffix();
     }
 }
