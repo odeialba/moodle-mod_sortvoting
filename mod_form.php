@@ -188,6 +188,10 @@ class mod_sortvoting_mod_form extends moodleform_mod {
      * @return string
      */
     protected function get_suffixed_name(string $fieldname): string {
-        return $fieldname . $this->get_suffix();
+        if (method_exists($this, 'get_suffix')) {
+            return $fieldname . $this->get_suffix();
+        }
+
+        return $fieldname;
     }
 }
