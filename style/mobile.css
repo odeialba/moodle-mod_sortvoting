@@ -1,0 +1,17 @@
+.thead {
+    background-color: #f8f9fa;
+}
+
+.results ion-col {
+    border: 0.5px solid #dee2e6;
+}
+
+#sortvotinglist {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#sortvotinglist ion-item:first-child .button-up:first-child,
+#sortvotinglist ion-item:last-child .button-down:last-child {
+    display: none;
+}

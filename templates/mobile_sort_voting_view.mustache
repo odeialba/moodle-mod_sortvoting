@@ -1,0 +1,123 @@
+{{!
+    This file is part of the mod_sortvoting plugin for Moodle - http://moodle.org/
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_sortvoting/mobile_sort_voting_view
+
+    Template for showing list of options to sort and the results of the votes on the mobile app.
+
+    Example context (json):
+    {
+        "description": "foo",
+        "allowupdate": true,
+        "max": 3,
+        "options": [
+            {
+                "id": 1,
+                "text": "Option 1",
+                "position": 1
+            },
+            {
+                "id": 2,
+                "text": "Option 2",
+                "position": 2
+            },
+            {
+                "id": 3,
+                "text": "Option 3",
+                "position": 3
+            }
+        ],
+        "canseeresults": true,
+        "votes": [
+            {
+                "text": "Option 1",
+                "position": 1
+            },
+            {
+                "text": "Option 2",
+                "position": 2
+            },
+            {
+                "text": "Option 3",
+                "position": 3
+            }
+        ]
+    }
+}}
+{{=<% %>=}}
+<div>
+  <ion-card class="core-medium-card">
+    <ion-item><ion-label class="ion-text-wrap"><%description%></ion-label></ion-item>
+  </ion-card>
+  <ion-card>
+    <%#allowupdate%>
+      <ion-item><ion-label class="ion-text-wrap">{{ 'plugin.mod_sortvoting.instructions' | translate }}</ion-label></ion-item>
+    <%/allowupdate%>
+    <ion-list id="sortvotinglist">
+      <%#options%>
+        <ion-item id="item-<%id%>">
+          <ion-grid>
+            <ion-card class="ion-no-margin">
+              <ion-row>
+                <%#allowupdate%>
+                  <ion-col size="auto">
+                    <ion-row class="button-up">
+                      <ion-button shape="round" color="primary" aria-label="up" (click)="moveUp(<%id%>)">
+                        <ion-icon slot="icon-only" name="chevron-up-outline" aria-label="arrow up"></ion-icon>
+                      </ion-button>
+                    </ion-row>
+                    <ion-row class="button-down">
+                      <ion-button shape="round" color="primary" aria-label="down" (click)="moveDown(<%id%>)">
+                        <ion-icon slot="icon-only" name="chevron-down-outline" aria-label="arrow down"></ion-icon>
+                      </ion-button>
+                    </ion-row>
+                  </ion-col>
+                <%/allowupdate%>
+                <ion-col class="ion-align-self-center font-sm">
+                  <input type="number" name="option[]" data-optionid="<%id%>" value="<%position%>" max="<%max%>" min="1" class="ion-hide" />
+                  <%text%>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ion-grid>
+        </ion-item>
+      <%/options%>
+    </ion-list>
+    <%#allowupdate%>
+      <ion-button class="ion-margin" expand="block" type="submit" (click)="submitResponses()">
+        {{ 'core.save' | translate }}
+      </ion-button>
+    <%/allowupdate%>
+  </ion-card>
+
+  <%#canseeresults%>
+    <ion-card>
+      <ion-grid class="ion-margin results">
+        <ion-row class="thead core-bold">
+          <ion-col size="3">{{ 'plugin.mod_sortvoting.position' | translate }}</ion-col>
+          <ion-col>{{ 'plugin.mod_sortvoting.option' | translate }}</ion-col>
+        </ion-row>
+        <%#votes%>
+          <ion-row>
+            <ion-col size="3"><%position%></ion-col>
+            <ion-col><%text%></ion-col>
+          </ion-row>
+        <%/votes%>
+      </ion-grid>
+    </ion-card>
+  <%/canseeresults%>
+</div>
