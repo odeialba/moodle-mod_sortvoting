@@ -32,5 +32,6 @@ $functions = [
         'type' => 'write',
         'capabilities' => 'mod/sortvoting:vote',
         'ajax' => true,
+        'services'     => [MOODLE_OFFICIAL_MOBILE_SERVICE, 'local_mobile'],
     ],
 ];

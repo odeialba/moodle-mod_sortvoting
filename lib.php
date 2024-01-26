@@ -386,7 +386,7 @@ function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = t
 
     $position = 1;
     $previousvote = null;
-    $maxvotescount = (int) max(array_column($existingvotes, 'votescount'));
+    $maxvotescount = empty($existingvotes) ? 0 : (int) max(array_column($existingvotes, 'votescount'));
     foreach ($existingvotes as $key => $vote) {
         if ($previousvote !== null && $previousvote->avg !== $vote->avg) {
             $position++;
