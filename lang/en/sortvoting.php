@@ -37,6 +37,7 @@ $string['calendarstart'] = '{$a} opens';
 $string['completiondetail:submit'] = 'Submit vote';
 $string['completionsubmit'] = 'Student must submit a vote to complete this activity';
 $string['errorduplicatedposition'] = 'All positions must be unique.';
+$string['eventvoteupdated'] = 'Vote saved/updated';
 $string['instructions'] = 'Change the options below into the desired order, so your preferred choice is at the top and your least favourite choice is at the bottom.';
 $string['modulename'] = 'Preference Sort Voting';
 $string['modulenameplural'] = 'Preference Sort Votings';

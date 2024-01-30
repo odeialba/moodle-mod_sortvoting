@@ -236,8 +236,9 @@ function sortvoting_user_submit_response($sortvoting, array $votes, $course, $cm
     // Save votes in sortvoting_answers table.
     $DB->insert_records('sortvoting_answers', $answers);
 
-    // Update completion state.
-    sortvoting_update_completion($sortvoting, $course, $cm);
+    // Completion and trigger events.
+    $modulecontext = context_module::instance($cm->id);
+    sortvoting_vote($sortvoting, $course, $cm, $modulecontext);
 }
 
 /**
@@ -533,6 +534,30 @@ function sortvoting_view($sortvoting, $course, $cm, $context) {
     // Completion update.
     $completion = new completion_info($course);
     $completion->set_module_viewed($cm);
+}
+
+/**
+ * Mark the activity completed (if required) and trigger the sortvoting_vote event.
+ *
+ * @param  stdClass $sortvoting sortvoting object
+ * @param  stdClass $course     course object
+ * @param  stdClass $cm         course module object
+ * @param  stdClass $context    context object
+ */
+function sortvoting_vote($sortvoting, $course, $cm, $context) {
+    // Trigger sortvoting_vote event.
+    $params = [
+        'objectid' => $sortvoting->id,
+        'context' => $context,
+    ];
+    $event = \mod_sortvoting\event\sortvoting_vote::create($params);
+    $event->add_record_snapshot('course_modules', $cm);
+    $event->add_record_snapshot('course', $course);
+    $event->add_record_snapshot('sortvoting', $sortvoting);
+    $event->trigger();
+
+    // Completion update.
+    sortvoting_update_completion($sortvoting, $course, $cm);
 }
 
 /**
