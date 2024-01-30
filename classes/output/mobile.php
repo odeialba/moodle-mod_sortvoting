@@ -104,6 +104,11 @@ class mobile {
             'votes' => $existingvotes,
         ];
 
+        // Completion and trigger events.
+        $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+        $modulecontext = context_module::instance($cm->id);
+        sortvoting_view($sortvoting, $course, $cm, $modulecontext);
+
         return [
             'templates' => [
                 [
