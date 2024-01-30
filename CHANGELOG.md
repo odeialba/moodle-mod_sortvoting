@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.8 - 2024-01-30
+### Changed
+- Instructions removed when the user can't vote.
+### Added
+- Mobile app support.
+- Event for when a user votes.
+
 ## 1.0.7 - 2023-11-10
 ### Changed
 - Added more precision to the calculation of the position on the results.

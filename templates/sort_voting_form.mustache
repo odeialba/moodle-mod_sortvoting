@@ -55,7 +55,9 @@
 }}
 <input type="hidden" name="sortvotingid" value="{{sortvotingid}}" />
 
-<div class="mb-3">{{#str}}instructions, mod_sortvoting{{/str}}</div>
+{{#allowupdate}}
+    <div class="mb-3">{{#str}}instructions, mod_sortvoting{{/str}}</div>
+{{/allowupdate}}
 
 {{! This list is drag and drop sortable. }}
 <ul id="sortvotinglist" class="ml-0 fa-ul">
