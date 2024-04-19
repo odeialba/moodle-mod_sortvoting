@@ -62,7 +62,7 @@
 {{! This list is drag and drop sortable. }}
 <ul id="sortvotinglist" class="ml-0 fa-ul">
 {{#options}}
-    <li class="d-flex card p-3 mb-2 {{^allowupdate}}bg-gray-100{{/allowupdate}} {{#allowupdate}}optionitem draggable{{/allowupdate}}" {{#allowupdate}}data-drag-type="move" draggable="true"{{/allowupdate}}>
+    <li class="d-flex card p-3 mb-2 {{#allowupdate}}optionitem draggable{{/allowupdate}}" {{#allowupdate}}data-drag-type="move" draggable="true"{{/allowupdate}}>
         <div>
             <input type="number" name="option[]" data-optionid="{{id}}" value="{{position}}" max="{{max}}" min="1" class="d-none" />
             <span class="float-right dragicon ml-auto">{{#pix}}i/dragdrop{{/pix}}</span>
