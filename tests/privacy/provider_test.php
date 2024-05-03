@@ -27,7 +27,7 @@ use stdClass;
  * @copyright  2023 Odei Alba <odeialba@odeialba.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider_test extends \core_privacy\tests\provider_testcase {
+final class provider_test extends \core_privacy\tests\provider_testcase {
     /** @var stdClass The student object. */
     protected $student;
 
@@ -92,7 +92,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::get_metadata().
      * @covers ::get_metadata
      */
-    public function test_get_metadata() {
+    public function test_get_metadata(): void {
         $collection = new collection('mod_sortvoting');
         $newcollection = provider::get_metadata($collection);
         $itemcollection = $newcollection->get_collection();
@@ -114,7 +114,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::get_contexts_for_userid().
      * @covers ::get_contexts_for_userid
      */
-    public function test_get_contexts_for_userid() {
+    public function test_get_contexts_for_userid(): void {
         $cm = get_coursemodule_from_instance('sortvoting', $this->sortvoting->id);
 
         $contextlist = provider::get_contexts_for_userid($this->student->id);
@@ -128,7 +128,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::export_user_data().
      * @covers ::export_user_data
      */
-    public function test_export_for_context() {
+    public function test_export_for_context(): void {
         $cm = get_coursemodule_from_instance('sortvoting', $this->sortvoting->id);
         $cmcontext = \context_module::instance($cm->id);
 
@@ -142,7 +142,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::delete_data_for_all_users_in_context().
      * @covers ::delete_data_for_all_users_in_context
      */
-    public function test_delete_data_for_all_users_in_context() {
+    public function test_delete_data_for_all_users_in_context(): void {
         global $DB;
 
         $sortvoting = $this->sortvoting;
@@ -190,7 +190,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::delete_data_for_user().
      * @covers ::delete_data_for_user
      */
-    public function test_delete_data_for_user_() {
+    public function test_delete_data_for_user(): void {
         global $DB;
 
         $sortvoting = $this->sortvoting;
@@ -283,7 +283,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::get_users_in_context().
      * @covers ::get_users_in_context
      */
-    public function test_get_users_in_context() {
+    public function test_get_users_in_context(): void {
         $cm = get_coursemodule_from_instance('sortvoting', $this->sortvoting->id);
         $cmcontext = \context_module::instance($cm->id);
 
@@ -300,7 +300,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::get_users_in_context() with invalid context type.
      * @covers ::get_users_in_context
      */
-    public function test_get_users_in_context_invalid_context_type() {
+    public function test_get_users_in_context_invalid_context_type(): void {
         $systemcontext = \context_system::instance();
 
         $userlist = new \core_privacy\local\request\userlist($systemcontext, 'mod_sortvoting');
@@ -313,7 +313,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::delete_data_for_users().
      * @covers ::delete_data_for_users
      */
-    public function test_delete_data_for_users() {
+    public function test_delete_data_for_users(): void {
         global $DB;
 
         $sortvoting = $this->sortvoting;

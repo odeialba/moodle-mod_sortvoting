@@ -31,14 +31,14 @@ require_once($CFG->dirroot . '/mod/sortvoting/lib.php');
  * @copyright   2023 Odei Alba <odeialba@odeialba.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class lib_test extends \externallib_advanced_testcase {
+final class lib_test extends \externallib_advanced_testcase {
     /**
      * Tests events after sortvoting is viewed.
      *
      * @covers ::sortvoting_view
      * @return void
      */
-    public function test_sortvoting_view() {
+    public function test_sortvoting_view(): void {
         global $CFG;
 
         $this->resetAfterTest();
@@ -76,7 +76,7 @@ class lib_test extends \externallib_advanced_testcase {
      * @covers ::mod_sortvoting_get_completion_active_rule_descriptions
      * @return void
      */
-    public function test_mod_sortvoting_completion_get_active_rule_descriptions() {
+    public function test_mod_sortvoting_completion_get_active_rule_descriptions(): void {
         $this->resetAfterTest();
         $this->setAdminUser();
 

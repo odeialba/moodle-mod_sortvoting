@@ -23,6 +23,7 @@ use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use moodle_exception;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die;
 require_once($CFG->dirroot . '/mod/sortvoting/lib.php');
@@ -79,16 +80,17 @@ class save_vote extends external_api {
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
         \mod_sortvoting\permission::require_can_vote($context);
-        $canseeresultsold = \mod_sortvoting\permission::can_see_results($sortvoting, $context);
 
         sortvoting_user_submit_response($sortvoting, $params['votes'], $course, $cm);
 
-        $canseeresultsnew = \mod_sortvoting\permission::can_see_results($sortvoting, $context);
+        $canseeresults = \mod_sortvoting\permission::can_see_results($sortvoting, $context);
+        $redirecturl = $canseeresults ? '/mod/sortvoting/report.php' : '/mod/sortvoting/view.php';
 
         return [
             'success' => true,
             'allowupdate' => (bool) $sortvoting->allowupdate,
-            'seeresultsupdated' => (bool) $canseeresultsold !== $canseeresultsnew,
+            'canseeresults' => (bool) $canseeresults,
+            'redirecturl' => (new moodle_url($redirecturl, ['id' => $cm->id]))->out(),
         ];
     }
 
@@ -102,9 +104,14 @@ class save_vote extends external_api {
             [
                 'success' => new external_value(PARAM_BOOL, 'Returns true on successful vote submision or throws an error'),
                 'allowupdate' => new external_value(PARAM_BOOL, 'Returns true if vote can be updated', VALUE_REQUIRED),
-                'seeresultsupdated' => new external_value(
+                'canseeresults' => new external_value(
                     PARAM_BOOL,
-                    'Returns true if the user could not see the results and can see them now (or viceversa)',
+                    'Returns true if the user can see the results of the vote',
+                    VALUE_REQUIRED
+                ),
+                'redirecturl' => new external_value(
+                    PARAM_URL,
+                    'Redirect URL to the results or the vote page',
                     VALUE_REQUIRED
                 ),
             ]

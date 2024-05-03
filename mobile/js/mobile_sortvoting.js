@@ -85,7 +85,7 @@ this.moveUp = (id) => {
     var prevOption = document.querySelector("#item-" + prevId);
 
     sortVotingList.insertBefore(option, prevOption);
-}
+};
 
 this.moveDown = (id) => {
     var options = document.getElementsByName('option[]');
@@ -114,4 +114,4 @@ this.moveDown = (id) => {
     var nextOption = document.querySelector("#item-" + nextId);
 
     sortVotingList.insertBefore(nextOption, option);
-}
+};

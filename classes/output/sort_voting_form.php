@@ -83,6 +83,7 @@ class sort_voting_form implements \renderable, \templatable {
         return [
             'sortvotingid' => $this->sortvoting->id,
             'allowupdate' => $allowupdate,
+            'alreadyvoted' => count($existingvotes) > 0,
             'options' => $optionsclean,
             'max' => count($options),
         ];

@@ -69,9 +69,9 @@ const saveVote = function(saveSortVoteElement) {
         } else {
             toastAdd(getString('voteerror', 'mod_sortvoting'), {type: 'danger'});
         }
-        if (result.seeresultsupdated) {
-            // Reload the whole page so the results tab is visible now but wasn't before (or viceversa).
-            window.location.reload();
+        if (result.canseeresults) {
+            // If the user can see the results, redirect to the results page. Otherwise, reload the page.
+            window.location.href = result.redirecturl;
         } else if (result.allowupdate) {
             saveSortVoteElement.removeAttribute('disabled');
         } else {

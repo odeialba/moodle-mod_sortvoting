@@ -1,0 +1,6 @@
+/*Adds a border around the cards in the preference sorting activity*/
+li.d-flex.card.p-3.mb-2.optionitem.draggable {
+    border-style: solid;
+    border-color: #c0c0c0;
+    border-width: thin;
+}

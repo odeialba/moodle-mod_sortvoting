@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.9 - 2024-05-03
+### Changed
+- Change "Save" for "Update" when the user has already voted.
+- Make the cards stand out more from the background.
+- Change behaviour so once the student has voted, they are taken automatically to the results screen.
+### Added
+- CI tests for Moodle 4.4.
+
 ## 1.0.8 - 2024-01-30
 ### Changed
 - Instructions removed when the user can't vote.
