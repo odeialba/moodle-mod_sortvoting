@@ -43,7 +43,7 @@ class AddonModSortVotingProvider {
             return true;
         }).catch((error) => {
             // The WebService has thrown an error, this means that responses cannot be submitted.
-            return Promise.reject(error);
+            throw error;
         });
     }
 
@@ -69,7 +69,7 @@ class AddonModSortVotingProvider {
                     var error = response && response.warnings && response.warnings[0] ?
                             response.warnings[0] : new context.CoreError('');
 
-                    return Promise.reject(error);
+                    throw error;
                 }
             });
         });
