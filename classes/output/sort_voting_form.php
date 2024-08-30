@@ -70,7 +70,7 @@ class sort_voting_form implements \renderable, \templatable {
             $position = isset($existingvotes[$option->id]) ? $existingvotes[$option->id] : $defaultposition++;
             $optionsclean[] = [
                 'id' => $option->id,
-                'text' => $option->text,
+                'text' => format_text($option->text, FORMAT_HTML),
                 'position' => $position,
             ];
         }

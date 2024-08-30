@@ -389,6 +389,10 @@ function sortvoting_get_response_data(stdClass $sortvoting, bool $onlyactive = t
     $previousvote = null;
     $maxvotescount = empty($existingvotes) ? 0 : (int) max(array_column($existingvotes, 'votescount'));
     foreach ($existingvotes as $key => $vote) {
+        // Format text for the results.
+        $existingvotes[$key]->text = format_text($vote->text, FORMAT_HTML);
+
+        // Get correct positions, using the same for equal votes.
         if ($previousvote !== null && $previousvote->avg !== $vote->avg) {
             $position++;
         }
