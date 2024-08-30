@@ -21,6 +21,7 @@
  */
 this.submitResponses = () => {
     let promise;
+    // eslint-disable-next-line promise/no-native
     promise = Promise.resolve();
     promise.then(() => {
         // Show loading modal.
@@ -39,6 +40,7 @@ this.submitResponses = () => {
             });
         });
 
+        /* eslint-disable promise/no-nesting */
         return this.sortVotingProvider.submitResponses(this.module.instance, votes).then(() => {
             // Responses have been sent to server or stored to be sent later.
             this.CoreDomUtilsProvider.showToast(this.TranslateService.instant('plugin.mod_sortvoting.votesuccess'));
@@ -53,6 +55,7 @@ this.submitResponses = () => {
         }).finally(() => {
             modal.dismiss();
         });
+        /* eslint-enable promise/no-nesting */
     }).catch(() => {
         // User cancelled, ignore.
     });
@@ -64,7 +67,7 @@ this.moveUp = (id) => {
     // Change value of the input elements.
     var prevId = 0;
     var canMove = true;
-    options.forEach(function (option, index) {
+    options.forEach(function(option, index) {
         if (option.getAttribute('data-optionid') == id) {
             if (parseInt(option.value) == option.getAttribute('min')) {
                 canMove = false;
@@ -93,7 +96,7 @@ this.moveDown = (id) => {
     // Change value of the input elements.
     var nextId = 0;
     var canMove = true;
-    options.forEach(function (option, index) {
+    options.forEach(function(option, index) {
         if (option.getAttribute('data-optionid') == id) {
             if (parseInt(option.value) == option.getAttribute('max')) {
                 canMove = false;

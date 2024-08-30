@@ -62,6 +62,7 @@ class AddonModSortVotingProvider {
                 votes: votes
             };
 
+            /* eslint-disable promise/no-nesting */
             return site.write('mod_sortvoting_save_vote', params).then((response) => {
                 if (!response || response.success === false) {
                     // TODO: Add warnings array to save_vote returns.
@@ -71,7 +72,10 @@ class AddonModSortVotingProvider {
 
                     throw error;
                 }
+
+                return;
             });
+            /* eslint-enable promise/no-nesting */
         });
     }
 
@@ -83,4 +87,5 @@ const result = {
     sortVotingProvider: sortVotingProvider,
 };
 
+// eslint-disable-next-line no-unused-expressions
 result;
