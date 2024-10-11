@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 - 2024-10-11
+### Added
+- CI tests for Moodle 4.5.
+### Fixed
+- Make options use filters.
+- Fix all the ci errors.
+
 ## 1.0.9 - 2024-05-03
 ### Changed
 - Change "Save" for "Update" when the user has already voted.
